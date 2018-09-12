@@ -25,7 +25,7 @@ Runtime: 3ms
 	1. open a terminal, and navigate to the repo folder (e.g. `cd /home/yourusername/location-of-repo/ec-idea`)
 	2. `ln -s out/production/assignment/player42.class player42.class`
 4. Run &rarr; Edit configurations &rarr; JAR Application section &rarr; Choose one (e.g.: `Sphere`) &rarr; Program Arguments &rarr; rename `player58` to your own (e.g. `player42`)
-5. Do the second step for all of the configurations (Sphere, BentCigar, Katsuura, Schaffers)
+5. Do the previous step for all of the configurations (Sphere, BentCigar, Katsuura, Schaffers)
 6. Test if everything  still works by repeating the steps of [Steps to see if everything is working](#steps-to-see-if-everything-is-working)
 
 ## Making IDEA generate your submission.jar:
