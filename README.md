@@ -26,4 +26,4 @@ Runtime: 3ms
 5. Test if everything  still works by repeating the steps of [Steps to see if everything is working](#steps-to-see-if-everything-is-working)
 
 ## Making IDEA generate your submission.jar:
-1. A submission.jar file is generated automatically with the project build. The location of this is <repo-directory>/out/production/assignment/submission.jar
+1. A submission.jar file is generated automatically with the project build. The location of this is ec-idea/out/production/assignment/submission.jar
