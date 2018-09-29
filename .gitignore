@@ -1,0 +1,8 @@
+*
+
+!*.java
+
+!algorithm/
+!algorithm/**/
+!algorithm/**/*.java
+
