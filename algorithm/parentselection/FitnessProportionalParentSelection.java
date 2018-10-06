@@ -9,6 +9,8 @@ import java.util.Map;
 
 public class FitnessProportionalParentSelection implements ParentSelection {
 
+    //TODO implement sigma scaling
+
     // Sphere evaluation doesn't work though??
 
     @Override
