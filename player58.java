@@ -2,6 +2,7 @@ import algorithm.initialization.Initialization;
 import algorithm.Population;
 import algorithm.initialization.RandomInitialization;
 import algorithm.mutation.UniformMutation;
+import algorithm.mutation.NonUniformMutation;
 import algorithm.parentselection.ParentSelection;
 import algorithm.parentselection.TournamentParentSelection;
 import algorithm.survivalselection.ReplaceAllSurvivalSelection;
@@ -71,11 +72,12 @@ public class player58 implements ContestSubmission
 		OnlineFitnessStatisticsPrinter onlineFitnessStatisticsPrinter = new OnlineFitnessStatisticsPrinter();
 
 		int populationSize = 100;
-		double probabilityOfMutation = 0;
+		double probabilityOfMutation = 0.5;
 
 		Initialization initialization = new RandomInitialization(populationSize);
 		ParentSelection parentSelection = new TournamentParentSelection(20);
-		UniformMutation mutation = new UniformMutation(probabilityOfMutation);
+		//UniformMutation mutation = new UniformMutation(probabilityOfMutation);
+		NonUniformMutation mutation = new NonUniformMutation(probabilityOfMutation, 1.0);
 		Recombination recombination = new DiscreteRecombination();
 		SurvivorSelection survivorSelection = new ReplaceAllSurvivalSelection();
 		TerminationCriteria terminationCriteria = new NoTerminationCriteria();
