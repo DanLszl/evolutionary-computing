@@ -81,8 +81,8 @@ public class player58 implements ContestSubmission
 
 		Initialization initialization = new RandomInitialization(populationSize);
 		ParentSelection parentSelection = new TournamentParentSelection(20);
-		//NonUniformMutation mutation = new NonUniformMutation(sigma, lowerBoundary, upperBoundary);
-		UniformMutation mutation = new UniformMutation(probabilityOfMutation, lowerBoundary, upperBoundary);
+		NonUniformMutation mutation = new NonUniformMutation(sigma, lowerBoundary, upperBoundary);
+		//UniformMutation mutation = new UniformMutation(probabilityOfMutation, lowerBoundary, upperBoundary);
 		Recombination recombination = new DiscreteRecombination();
 		SurvivorSelection survivorSelection = new ReplaceAllSurvivalSelection();
 		TerminationCriteria terminationCriteria = new NoTerminationCriteria();
