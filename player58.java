@@ -1,10 +1,9 @@
-import algorithm.Individual;
-import algorithm.Initialization;
+import algorithm.initialization.Initialization;
 import algorithm.Population;
+import algorithm.initialization.RandomInitialization;
 import algorithm.mutation.UniformMutation;
-import algorithm.parentselection.AllParentSelection;
-import algorithm.parentselection.FitnessProportionalParentSelection;
 import algorithm.parentselection.ParentSelection;
+import algorithm.parentselection.TournamentParentSelection;
 import algorithm.survivalselection.ReplaceAllSurvivalSelection;
 import algorithm.survivalselection.SurvivorSelection;
 import org.vu.contest.ContestSubmission;
@@ -13,8 +12,8 @@ import algorithm.recombination.DiscreteRecombination;
 import algorithm.recombination.Recombination;
 import algorithm.terminationcriteria.NoTerminationCriteria;
 import algorithm.terminationcriteria.TerminationCriteria;
+import algorithm.statistics.OnlineFitnessStatisticsPrinter;
 
-import java.util.Map;
 import java.util.Random;
 import java.util.Properties;
 
@@ -61,17 +60,21 @@ public class player58 implements ContestSubmission
             // Do sth else
         }
     }
-    
+
+
 	public void run()
 	{
 		// Run your algorithm here
 
 		System.out.println(evaluations_limit_);
 
+		OnlineFitnessStatisticsPrinter onlineFitnessStatisticsPrinter = new OnlineFitnessStatisticsPrinter();
+
 		int populationSize = 100;
 		double probabilityOfMutation = 0;
 
-		ParentSelection parentSelection = new AllParentSelection();
+		Initialization initialization = new RandomInitialization(populationSize);
+		ParentSelection parentSelection = new TournamentParentSelection(20);
 		UniformMutation mutation = new UniformMutation(probabilityOfMutation);
 		Recombination recombination = new DiscreteRecombination();
 		SurvivorSelection survivorSelection = new ReplaceAllSurvivalSelection();
@@ -79,35 +82,34 @@ public class player58 implements ContestSubmission
 
 
 		// init population
-		Population previousPopulation = Initialization.initializeA(populationSize);
+		Population previousGeneration = initialization.initialize();
 
-		// calculate fitness
-		Map<Individual, Double> previousGenerationFitness = previousPopulation.evaluatePopulation(evaluation_);
+		// evaluate initial population
+		previousGeneration.evaluate(evaluation_);
 		int evals = populationSize;
 
         while(evals < evaluations_limit_){
-
+			onlineFitnessStatisticsPrinter.printStats(previousGeneration);
         	// Select parents
-			Population parents = parentSelection.selectParents(previousGenerationFitness);
-			// System.out.println(parents);
+
+			Population parents = parentSelection.selectParents(previousGeneration);
+
 			// Apply crossover / mutation operators
 			Population offspring = recombination.recombine(parents);
-			// System.out.println(Integer.toString(parents.size()) + " " + Integer.toString(offspring.size()));
+
 			Population mutatedOffspring = mutation.mutate(offspring);
-			// Check fitness of unknown fuction
-			Map<Individual, Double> offspringFitness = mutatedOffspring.evaluatePopulation(evaluation_);
+			// Evaluate fitness of the offspring population
+			mutatedOffspring.evaluate(evaluation_);
 
 			// Select survivors
-			Map<Individual, Double> nextGenerationFitness = survivorSelection.selectSurvivors(previousGenerationFitness, offspringFitness);
+			Population nextGeneration = survivorSelection.selectSurvivors(previousGeneration, mutatedOffspring);
 
 
+			evals += nextGeneration.size();
 
-			evals += nextGenerationFitness.size();
+			previousGeneration = nextGeneration;
 
-			previousGenerationFitness = nextGenerationFitness;
-
-
-			if (terminationCriteria.shouldTerminate(nextGenerationFitness)) {
+			if (terminationCriteria.shouldTerminate(nextGeneration)) {
 				break;
 			}
         }

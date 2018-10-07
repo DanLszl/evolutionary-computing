@@ -1,13 +1,13 @@
 package algorithm.terminationcriteria;
 
-import algorithm.Individual;
 
-import java.util.Map;
+import algorithm.Population;
+
 
 public class NoTerminationCriteria implements TerminationCriteria {
 
     @Override
-    public boolean shouldTerminate(Map<Individual, Double> nextGenerationFitness) {
+    public boolean shouldTerminate(Population nextGenerationFitness) {
         return false;
     }
 }
