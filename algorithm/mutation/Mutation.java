@@ -15,7 +15,7 @@ public abstract class Mutation {
     }
 
     // Overwrites the population
-    abstract Population mutate(Population individual);
+    abstract Population mutate(Population population);
 
     public double checkBoundaries(double value) {
         if (value < lowerBoundary) {

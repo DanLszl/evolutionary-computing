@@ -3,6 +3,7 @@ import algorithm.Population;
 import algorithm.initialization.RandomInitialization;
 import algorithm.mutation.UniformMutation;
 import algorithm.mutation.NonUniformMutation;
+import algorithm.mutation.UncorrelatedMutationWithNSigma;
 import algorithm.parentselection.ParentSelection;
 import algorithm.parentselection.TournamentParentSelection;
 import algorithm.survivalselection.ReplaceAllSurvivalSelection;
@@ -78,11 +79,15 @@ public class player58 implements ContestSubmission
 		double lowerBoundary = -5.0;
 		double upperBoundary = 5.0;
 		double sigma = 0.5;
+		//not to be close to 0
+		double threshold = 0.05;
+		double problemhardness = 10.0;
 
 		Initialization initialization = new RandomInitialization(populationSize);
 		ParentSelection parentSelection = new TournamentParentSelection(20);
-		NonUniformMutation mutation = new NonUniformMutation(sigma, lowerBoundary, upperBoundary);
+		//NonUniformMutation = new NonUniformMutation(sigma, lowerBoundary, upperBoundary);
 		//UniformMutation mutation = new UniformMutation(probabilityOfMutation, lowerBoundary, upperBoundary);
+		UncorrelatedMutationWithNSigma mutation = new UncorrelatedMutationWithNSigma(threshold, problemhardness, lowerBoundary, upperBoundary);
 		Recombination recombination = new DiscreteRecombination();
 		SurvivorSelection survivorSelection = new ReplaceAllSurvivalSelection();
 		TerminationCriteria terminationCriteria = new NoTerminationCriteria();
