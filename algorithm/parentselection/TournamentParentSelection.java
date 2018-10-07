@@ -3,37 +3,36 @@ package algorithm.parentselection;
 import algorithm.Individual;
 import algorithm.Population;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
 
 public class TournamentParentSelection implements ParentSelection {
 
+    private final int tournamentSize;
+
+    public TournamentParentSelection(int tournamentSize) {
+        this.tournamentSize = tournamentSize;
+    }
+    
     @Override
-    public Population selectParents(Map<Individual, Double> populationFitness) {
+    public Population selectParents(Population previousPopulation) {
 
-        int tournamentSize = 20;
-
-
-        List<Individual> population = new ArrayList<>();
+        Population population = new Population(0);
 
         //Keep going until we have the same population size again
 
-        for (int i=0; i<populationFitness.size(); i++) {
+        for (int i = 0; i < previousPopulation.size(); i++) {
 
-            Map <Individual, Double> tournamentGroup = new HashMap<Individual, Double>();
+            Population tournamentGroup = new Population();
 
             // Build a single tournament group
 
             for (int j=0; j<tournamentSize; j++){
 
-                int randomVar = (int) (Math.random()*populationFitness.size());
+                int randomVar = (int) (Math.random()*previousPopulation.size());
                 int counter = 0;
-                for (Individual k : populationFitness.keySet()){
+                for (Individual k : previousPopulation.getIndividuals()){
 
                     if (counter == randomVar){
-                        tournamentGroup.put(k , populationFitness.get(k));
+                        tournamentGroup.add(k);
                         break;
                     }
 
@@ -48,11 +47,11 @@ public class TournamentParentSelection implements ParentSelection {
 
             boolean firstRound = true;
 
-            for (Individual competitor : tournamentGroup.keySet()){
+            for (Individual competitor : tournamentGroup.getIndividuals()){
                 if ( firstRound ) {
                     winner = competitor;
                     firstRound = false;
-                } else if (tournamentGroup.get(competitor) > tournamentGroup.get(winner)){
+                } else if (competitor.getFitness() > winner.getFitness()){
                     winner = competitor;
                 }
             }
@@ -63,6 +62,6 @@ public class TournamentParentSelection implements ParentSelection {
 
         }
 
-        return new Population(population);
+        return population;
     }
 }

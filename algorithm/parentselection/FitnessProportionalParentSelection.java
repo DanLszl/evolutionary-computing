@@ -3,9 +3,6 @@ package algorithm.parentselection;
 import algorithm.Individual;
 import algorithm.Population;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public class FitnessProportionalParentSelection implements ParentSelection {
 
@@ -14,17 +11,16 @@ public class FitnessProportionalParentSelection implements ParentSelection {
     // Sphere evaluation doesn't work though??
 
     @Override
-    public Population selectParents(Map<Individual, Double> populationFitness) {
-
+    public Population selectParents(Population previousPopulation) {
         // Tried to follow the code in the java example of https://en.wikipedia.org/wiki/Fitness_proportionate_selection
 
         // First get the total fitness of population
 
         double totalFitness = 0;
 
-        System.out.println(populationFitness.values());
+        // System.out.println(previousPopulation.getFitnessValues());
 
-        for (Double i : populationFitness.values()) {
+        for (Double i : previousPopulation.getFitnessValues()) {
             totalFitness += i;
         }
 
@@ -33,15 +29,15 @@ public class FitnessProportionalParentSelection implements ParentSelection {
         // And we see where it falls
         // And from there choose which parent will go to the next round
 
-        List<Individual> population = new ArrayList<>();
+        Population population = new Population(0);
 
-        for (int i=0; i<populationFitness.size(); i++) {
+        for (int i=0; i < previousPopulation.size(); i++) {
 
             double randomVar = Math.random()*totalFitness;
 
-            for (Individual individual : populationFitness.keySet()){
+            for (Individual individual : previousPopulation.getIndividuals()){
 
-                randomVar -= populationFitness.get(individual);
+                randomVar -= individual.getFitness();
 
                 if (randomVar < 0) {
 
@@ -55,6 +51,6 @@ public class FitnessProportionalParentSelection implements ParentSelection {
 
         }
 
-        return new Population(population);
+        return population;
     }
 }

@@ -1,9 +1,8 @@
 package algorithm.terminationcriteria;
 
-import algorithm.Individual;
 
-import java.util.Map;
+import algorithm.Population;
 
 public interface TerminationCriteria {
-    boolean shouldTerminate(Map<Individual, Double> nextGenerationFitness);
+    boolean shouldTerminate(Population nextGenerationFitness);
 }

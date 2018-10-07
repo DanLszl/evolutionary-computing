@@ -3,37 +3,37 @@ package algorithm;
 import org.vu.contest.ContestEvaluation;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Population {
-    public List<Individual> individuals = new ArrayList<>();
+    private List<Individual> individuals = new ArrayList<>();
 
-    public Population(List<Individual> individuals) {
+    private Population(List<Individual> individuals) {
         this.individuals = individuals;
     }
 
-    public Population(int populationsize) {
+    public Population() {
+        this(0);
+    }
 
+    public Population(int populationsize) {
         for (int i = 0; i < populationsize; i++) {
             individuals.add(new Individual());
         }
     }
 
-    public Map<Individual, Double> evaluatePopulation(ContestEvaluation evaluation_) {
-        Map<Individual, Double> pFitness = new HashMap<>();
-
+    /**
+     * Evaluates the individuals in the population. After this call every individuals fitness will be set
+     * */
+    public void evaluate(ContestEvaluation evaluation) {
         for (Individual i : individuals) {
-            if (i.genotype == null) {
-                System.out.println("What the heck");
+            if (!i.isEvaluated()) {
+                i.evaluate(evaluation);
             }
-            double d = (double) evaluation_.evaluate(i.genotype);
-            pFitness.put(i, d);
         }
-        return pFitness;
     }
 
+    @Override
     public Population clone() {
         List<Individual> clonedIndividuals = new ArrayList<>();
         for (Individual i : individuals) {
@@ -46,4 +46,19 @@ public class Population {
         return individuals.size();
     }
 
+    public List<Double> getFitnessValues() {
+        List<Double> fitnessValues = new ArrayList<>();
+        for (Individual i : individuals) {
+            fitnessValues.add(i.getFitness());
+        }
+        return fitnessValues;
+    }
+
+    public List<Individual> getIndividuals() {
+        return individuals;
+    }
+
+    public void add(Individual individual) {
+        individuals.add(individual);
+    }
 }

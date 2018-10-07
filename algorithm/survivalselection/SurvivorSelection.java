@@ -1,9 +1,7 @@
 package algorithm.survivalselection;
 
-import algorithm.Individual;
-
-import java.util.Map;
+import algorithm.Population;
 
 public interface SurvivorSelection {
-    Map<Individual, Double> selectSurvivors(Map<Individual, Double> previousPopulationFitness, Map<Individual, Double> offspringFitness);
+    Population selectSurvivors(Population previousPopulation, Population offspring);
 }
