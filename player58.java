@@ -77,7 +77,7 @@ public class player58 implements ContestSubmission
 		double probabilityOfMutation = 0.5;
 		double lowerBoundary = -5.0;
 		double upperBoundary = 5.0;
-		double sigma = 0.2;
+		double sigma = 0.5;
 
 		Initialization initialization = new RandomInitialization(populationSize);
 		ParentSelection parentSelection = new TournamentParentSelection(20);
