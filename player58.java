@@ -69,7 +69,7 @@ public class player58 implements ContestSubmission
 		System.out.println(evaluations_limit_);
 
 		int populationSize = 100;
-		double probabilityOfMutation = 0.5;
+		double probabilityOfMutation = 0;
 
 		ParentSelection parentSelection = new AllParentSelection();
 		UniformMutation mutation = new UniformMutation(probabilityOfMutation);
@@ -89,10 +89,10 @@ public class player58 implements ContestSubmission
 
         	// Select parents
 			Population parents = parentSelection.selectParents(previousGenerationFitness);
-			System.out.println(parents);
+			// System.out.println(parents);
 			// Apply crossover / mutation operators
 			Population offspring = recombination.recombine(parents);
-			System.out.println(Integer.toString(parents.size()) + " " + Integer.toString(offspring.size()));
+			// System.out.println(Integer.toString(parents.size()) + " " + Integer.toString(offspring.size()));
 			Population mutatedOffspring = mutation.mutate(offspring);
 			// Check fitness of unknown fuction
 			Map<Individual, Double> offspringFitness = mutatedOffspring.evaluatePopulation(evaluation_);
@@ -110,7 +110,6 @@ public class player58 implements ContestSubmission
 			if (terminationCriteria.shouldTerminate(nextGenerationFitness)) {
 				break;
 			}
-
         }
 
 	}
