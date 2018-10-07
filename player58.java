@@ -2,6 +2,7 @@ import algorithm.initialization.Initialization;
 import algorithm.Population;
 import algorithm.initialization.RandomInitialization;
 import algorithm.mutation.UniformMutation;
+import algorithm.mutation.NonUniformMutation;
 import algorithm.parentselection.ParentSelection;
 import algorithm.parentselection.TournamentParentSelection;
 import algorithm.survivalselection.ReplaceAllSurvivalSelection;
@@ -68,14 +69,20 @@ public class player58 implements ContestSubmission
 
 		System.out.println(evaluations_limit_);
 
-		OnlineFitnessStatisticsPrinter onlineFitnessStatisticsPrinter = new OnlineFitnessStatisticsPrinter();
+		//OnlineFitnessStatisticsPrinter onlineFitnessStatisticsPrinter = new OnlineFitnessStatisticsPrinter();
 
 		int populationSize = 100;
+
+		//Mutation parameters
 		double probabilityOfMutation = 0.5;
+		double lowerBoundary = -5.0;
+		double upperBoundary = 5.0;
+		double sigma = 0.2;
 
 		Initialization initialization = new RandomInitialization(populationSize);
 		ParentSelection parentSelection = new TournamentParentSelection(20);
-		UniformMutation mutation = new UniformMutation(probabilityOfMutation);
+		//NonUniformMutation mutation = new NonUniformMutation(sigma, lowerBoundary, upperBoundary);
+		UniformMutation mutation = new UniformMutation(probabilityOfMutation, lowerBoundary, upperBoundary);
 		Recombination recombination = new DiscreteRecombination();
 		SurvivorSelection survivorSelection = new ReplaceAllSurvivalSelection();
 		TerminationCriteria terminationCriteria = new NoTerminationCriteria();
@@ -89,7 +96,7 @@ public class player58 implements ContestSubmission
 		int evals = populationSize;
 
         while(evals < evaluations_limit_){
-			onlineFitnessStatisticsPrinter.printStats(previousGeneration);
+			//onlineFitnessStatisticsPrinter.printStats(previousGeneration);
         	// Select parents
 			Population parents = parentSelection.selectParents(previousGeneration);
 
