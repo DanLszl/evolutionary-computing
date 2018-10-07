@@ -1,10 +1,7 @@
-import algorithm.Individual;
 import algorithm.initialization.Initialization;
 import algorithm.Population;
 import algorithm.initialization.RandomInitialization;
 import algorithm.mutation.UniformMutation;
-import algorithm.parentselection.AllParentSelection;
-import algorithm.parentselection.FitnessProportionalParentSelection;
 import algorithm.parentselection.ParentSelection;
 import algorithm.parentselection.TournamentParentSelection;
 import algorithm.survivalselection.ReplaceAllSurvivalSelection;
@@ -15,8 +12,8 @@ import algorithm.recombination.DiscreteRecombination;
 import algorithm.recombination.Recombination;
 import algorithm.terminationcriteria.NoTerminationCriteria;
 import algorithm.terminationcriteria.TerminationCriteria;
+import algorithm.statistics.OnlineFitnessStatisticsPrinter;
 
-import java.util.Map;
 import java.util.Random;
 import java.util.Properties;
 
@@ -71,6 +68,8 @@ public class player58 implements ContestSubmission
 
 		System.out.println(evaluations_limit_);
 
+		OnlineFitnessStatisticsPrinter onlineFitnessStatisticsPrinter = new OnlineFitnessStatisticsPrinter();
+
 		int populationSize = 100;
 		double probabilityOfMutation = 0.5;
 
@@ -90,13 +89,13 @@ public class player58 implements ContestSubmission
 		int evals = populationSize;
 
         while(evals < evaluations_limit_){
-
+			onlineFitnessStatisticsPrinter.printStats(previousGeneration);
         	// Select parents
 			Population parents = parentSelection.selectParents(previousGeneration);
 
 			// Apply crossover / mutation operators
 			Population offspring = recombination.recombine(parents);
-			System.out.println(Integer.toString(parents.size()) + " " + Integer.toString(offspring.size()));
+
 			Population mutatedOffspring = mutation.mutate(offspring);
 			// Evaluate fitness of the offspring population
 			mutatedOffspring.evaluate(evaluation_);
