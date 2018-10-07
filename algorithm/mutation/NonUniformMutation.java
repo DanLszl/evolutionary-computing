@@ -26,10 +26,10 @@ public class NonUniformMutation implements Mutation {
                     // parameters for the gaussian modeling (sigma already as argument)
                     double mean = 0.0 ;
 
-                    double oldAllele = i.getAllele(j) ;
+                    int oldAllele = i.getAllele(j) ;
 
                     // New allele is the old one plus the random gaussian addition mutation
-                    double newAllele = oldAllele + rand.nextGaussian() * step + mean ;
+                    int newAllele = Math.round(oldAllele + rand.nextGaussian() * step + mean) ;
 
                     // Make sure newAllele is within genetic range [-5,5]
                     while (Math.abs(newAllele) > 5){
