@@ -5,12 +5,18 @@ import algorithm.Population;
 
 import java.util.Random;
 
-public class UniformMutation implements Mutation {
+public class UniformMutation extends Mutation {
 
     // [0, 1]
     double probabilityOfMutating;
 
-    public UniformMutation(double p) {
+    //Boundaries for the mutated genome values
+    double lowerBoundary;
+    double upperBoundary;
+
+    public UniformMutation(double p, double lB, double uB) {
+
+        super(lB, uB);
         this.probabilityOfMutating = p;
     }
 
@@ -23,7 +29,8 @@ public class UniformMutation implements Mutation {
 
                 boolean replace = probabilityOfMutating > rand.nextDouble();
                 if (replace) {
-                    i.setAllele(j, rand.nextDouble() * 10 - 5);
+                    double newValue = checkBoundaries(rand.nextDouble() * 10 - 5);
+                    i.setAllele(j, newValue);
                 }
             }
         }
