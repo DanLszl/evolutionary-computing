@@ -14,7 +14,7 @@ public class OnlineFitnessStatisticsPrinter {
     List<Double> worstHistory = new ArrayList<>();
 
     public OnlineFitnessStatisticsPrinter() {
-        System.out.format("coloumns = [%7s, %14s, %14s, %14s]\n\n", "'best'", "'worst'", "'avg'", "'median'");
+        System.out.println("coloumns = ['best', 'worst', 'avg', 'median'");
         System.out.println("data = np.array([");
     }
 
@@ -34,13 +34,12 @@ public class OnlineFitnessStatisticsPrinter {
         Double avg = sum / fitnessValues.size();
         Double median = fitnessValues.get(fitnessValues.size() / 2);
 
-        System.out.format("[%.08f, %.08f, %.08f, %.08f],\n", best, worst, avg, median);
-
-        //System.out.print(best); System.out.print(", ");
-     //   System.out.print(worst); System.out.print(", ");
-       // System.out.print(avg); System.out.print(", ");
-        //System.out.println(median);
-
+        System.out.print("[");
+        System.out.print(best); System.out.print(", ");
+        System.out.print(worst); System.out.print(", ");
+        System.out.print(avg); System.out.print(", ");
+        System.out.print(median);
+        System.out.println("],");
 
 
         worstHistory.add(worst);
