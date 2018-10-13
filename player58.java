@@ -1,6 +1,7 @@
 import algorithm.initialization.Initialization;
 import algorithm.Population;
 import algorithm.initialization.RandomInitialization;
+import algorithm.mutation.NonUniformMutation;
 import algorithm.mutation.UniformMutation;
 import algorithm.parentselection.AllParentSelection;
 import algorithm.parentselection.ParentSelection;
@@ -75,14 +76,20 @@ public class player58 implements ContestSubmission
 		OnlineFitnessStatisticsPrinter onlineFitnessStatisticsPrinter = new OnlineFitnessStatisticsPrinter();
 
 		int populationSize = 100;
-		double probabilityOfMutation = 0.1;
 		int tournamentSizeA = 25;
 		int tournamentSizeB = 2;
 		double blendAlpha = 0;
 
+		//mutatioin parameters
+		double probabilityOfMutation = 0.1;
+		double sigma = 0.1;
+		double lowerBoundary = -5.0;
+		double upperBoundary = 5.0;
+
 		Initialization initialization = new RandomInitialization(populationSize);
 		// Parent selection is moved inside the actual algorithm
-		UniformMutation mutation = new UniformMutation(probabilityOfMutation);
+		//UniformMutation mutation = new UniformMutation(probabilityOfMutation,lowerBoundary,upperBoundary);
+		NonUniformMutation mutation = new NonUniformMutation(sigma,lowerBoundary,upperBoundary);
 		Recombination recombination = new BlendRecombination(blendAlpha);
 		SurvivorSelection survivorSelection = new ReplaceAllSurvivalSelection();
 		TerminationCriteria terminationCriteria = new NoTerminationCriteria();
