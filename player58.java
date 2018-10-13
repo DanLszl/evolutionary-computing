@@ -2,17 +2,21 @@ import algorithm.initialization.Initialization;
 import algorithm.Population;
 import algorithm.initialization.RandomInitialization;
 import algorithm.mutation.UniformMutation;
+import algorithm.parentselection.AllParentSelection;
 import algorithm.parentselection.ParentSelection;
 import algorithm.parentselection.TournamentParentSelection;
 import algorithm.survivalselection.ReplaceAllSurvivalSelection;
 import algorithm.survivalselection.SurvivorSelection;
+import algorithm.survivalselection.TournamentSurvivalSelection;
 import org.vu.contest.ContestSubmission;
 import org.vu.contest.ContestEvaluation;
 import algorithm.recombination.DiscreteRecombination;
+import algorithm.recombination.BlendRecombination;
 import algorithm.recombination.Recombination;
 import algorithm.terminationcriteria.NoTerminationCriteria;
 import algorithm.terminationcriteria.TerminationCriteria;
 import algorithm.statistics.OnlineFitnessStatisticsPrinter;
+
 
 import java.util.Random;
 import java.util.Properties;
@@ -71,12 +75,15 @@ public class player58 implements ContestSubmission
 		OnlineFitnessStatisticsPrinter onlineFitnessStatisticsPrinter = new OnlineFitnessStatisticsPrinter();
 
 		int populationSize = 100;
-		double probabilityOfMutation = 0.5;
+		double probabilityOfMutation = 0.1;
+		int tournamentSizeA = 25;
+		int tournamentSizeB = 2;
+		double blendAlpha = 0;
 
 		Initialization initialization = new RandomInitialization(populationSize);
-		ParentSelection parentSelection = new TournamentParentSelection(20);
+		// Parent selection is moved inside the actual algorithm
 		UniformMutation mutation = new UniformMutation(probabilityOfMutation);
-		Recombination recombination = new DiscreteRecombination();
+		Recombination recombination = new BlendRecombination(blendAlpha);
 		SurvivorSelection survivorSelection = new ReplaceAllSurvivalSelection();
 		TerminationCriteria terminationCriteria = new NoTerminationCriteria();
 
@@ -88,9 +95,23 @@ public class player58 implements ContestSubmission
 		previousGeneration.evaluate(evaluation_);
 		int evals = populationSize;
 
+		int generations = 0;
+
+		// Linear tournament size setter
+		int tournamentSizeStart = 3;
+		int tournamentSizeEnd = 25;
+		int tournamentSizeGenerations = 3000;
+
         while(evals < evaluations_limit_){
+
+			int tournamentSize = (generations * (tournamentSizeEnd - tournamentSizeStart)) / tournamentSizeGenerations + tournamentSizeStart;
+
+			ParentSelection parentSelection = new TournamentParentSelection(tournamentSize);
+
+			System.out.println(evals);
 			onlineFitnessStatisticsPrinter.printStats(previousGeneration);
         	// Select parents
+
 			Population parents = parentSelection.selectParents(previousGeneration);
 
 			// Apply crossover / mutation operators
@@ -105,6 +126,10 @@ public class player58 implements ContestSubmission
 
 
 			evals += nextGeneration.size();
+
+			generations += 1;
+
+			System.out.println(generations);
 
 			previousGeneration = nextGeneration;
 
