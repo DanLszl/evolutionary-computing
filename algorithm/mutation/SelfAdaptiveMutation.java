@@ -31,7 +31,7 @@ public class SelfAdaptiveMutation extends Mutation {
             for (int j = 0; j < i.genotypeLength(); j++) {
                 double pCoodinate = rand.nextGaussian();
 
-                double deltaSigma = i.getSigma(j) * Math.exp(overallTau*pOverall + coordinateTau*pCoodinate);
+                double deltaSigma = Math.exp(overallTau*pOverall + coordinateTau*pCoodinate);
                 double newSigma = checkSigma(i.getSigma(j) * deltaSigma);
                 i.setSigma(j, newSigma);
 

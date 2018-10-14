@@ -86,7 +86,7 @@ public class player58 implements ContestSubmission
 		double sigma = 0.1;
 		double lowerBoundary = -5.0;
 		double upperBoundary = 5.0;
-		double threshold = 0.01;
+		double threshold = 0.15;
 		double hardness = 10.0;
 
 		Initialization initialization = new RandomInitialization(populationSize);
