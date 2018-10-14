@@ -3,6 +3,7 @@ package algorithm;
 import org.vu.contest.ContestEvaluation;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Population {
@@ -60,5 +61,20 @@ public class Population {
 
     public void add(Individual individual) {
         individuals.add(individual);
+    }
+
+    /**
+     * Sort in descending order
+     * */
+    public void sort() {
+        individuals.sort((a, b) -> {
+            if (a.getFitness() < b.getFitness()) {
+                return -1;
+            } else if (a.getFitness() == b.getFitness()) {
+                return 0;
+            } else {
+                return 1;
+            }
+        });
     }
 }
