@@ -49,7 +49,8 @@ public class BlendRecombination implements Recombination {
             // Create a list to hold the top values
             List<Double> blendGenotypeTop = new ArrayList<>();
 
-
+            List<Double> blendSigmaBottom = new ArrayList<>();
+            List<Double> blendSigmaTop = new ArrayList<>();
 
             for(int i=0; i<genomeLength; i++){
 
@@ -65,6 +66,18 @@ public class BlendRecombination implements Recombination {
                     blendGenotypeTop.add(parentB.getAllele(i)+(blendAlpha*parentDifference));
                 }
 
+
+                double sigmaDifference = Math.abs(parentA.getSigma(i)-parentB.getSigma(i));
+
+                if (parentA.getSigma(i) >= parentB.getSigma(i)){
+                    blendSigmaBottom.add(parentB.getSigma(i)-(blendAlpha*sigmaDifference));
+                    blendSigmaTop.add(parentA.getSigma(i)+(blendAlpha*sigmaDifference));
+                } else if (parentA.getSigma(i) < parentB.getSigma(i)){
+                    blendSigmaBottom.add(parentA.getSigma(i)-(blendAlpha*sigmaDifference));
+                    blendSigmaTop.add(parentB.getSigma(i)+(blendAlpha*sigmaDifference));
+                }
+
+
                 // in some uniform way choose a value from the above
 
                 double firstValueToSet = Math.random()*(blendGenotypeTop.get(i)-blendGenotypeBottom.get(i)) + blendGenotypeBottom.get(i);
@@ -74,6 +87,17 @@ public class BlendRecombination implements Recombination {
                 double secondValueToSet = Math.random()*(blendGenotypeTop.get(i)-blendGenotypeBottom.get(i)) + blendGenotypeBottom.get(i);
 
                 childB.setAllele(i, secondValueToSet);
+
+
+
+                double firstSigmaToSet = Math.random()*(blendSigmaTop.get(i)-blendSigmaBottom.get(i)) + blendSigmaBottom.get(i);
+
+                childA.setSigma(i, firstSigmaToSet);
+
+                double secondSigmaToSet = Math.random()*(blendSigmaTop.get(i)-blendSigmaBottom.get(i)) + blendSigmaBottom.get(i);
+
+                childB.setSigma(i, secondSigmaToSet);
+
 
             }
 
