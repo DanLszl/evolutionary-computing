@@ -109,11 +109,9 @@ public class player58 implements ContestSubmission
                  stepsOnMaxSize
                  );
 
-		//UniformMutation mutation = new UniformMutation(probabilityOfMutation,lowerBoundary,upperBoundary);
-		//NonUniformMutation mutation = new NonUniformMutation(sigma,lowerBoundary,upperBoundary);
+
 		SelfAdaptiveMutation mutation = new SelfAdaptiveMutation(threshold,hardness,lowerBoundary,upperBoundary);
 		Recombination recombination = new BlendRecombination(blendAlpha);
-		//Recombination recombination = new DiscreteRecombination();
 		SurvivorSelection survivorSelection = new ReplaceAllSurvivalSelection();
 		TerminationCriteria terminationCriteria = new NoTerminationCriteria();
 

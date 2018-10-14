@@ -24,7 +24,7 @@ public class ShockedAdaptiveTournamentParentSelection extends AdaptiveTournament
 
     @Override
     protected void updateTournamentSize() {
-        System.out.println(tournamentSize);
+        //System.out.println(tournamentSize);
         // increment until it is smaller than the max
         if (tournamentSize < tournamentSizeEnd) {
 
