@@ -3,7 +3,10 @@ import algorithm.Population;
 import algorithm.initialization.RandomInitialization;
 import algorithm.mutation.UniformMutation;
 import algorithm.parentselection.ParentSelection;
+import algorithm.parentselection.RouletteWheelSelection;
 import algorithm.parentselection.TournamentParentSelection;
+import algorithm.probabilitydistribution.ProbabilityDistribution;
+import algorithm.probabilitydistribution.RankBasedExponential;
 import algorithm.survivalselection.ReplaceAllSurvivalSelection;
 import algorithm.survivalselection.SurvivorSelection;
 import org.vu.contest.ContestSubmission;
@@ -74,7 +77,10 @@ public class player58 implements ContestSubmission
 		double probabilityOfMutation = 0.5;
 
 		Initialization initialization = new RandomInitialization(populationSize);
-		ParentSelection parentSelection = new TournamentParentSelection(20);
+
+		ProbabilityDistribution pd = (new RankBasedExponential()).getProbabilites(populationSize);
+
+		ParentSelection parentSelection = new RouletteWheelSelection(pd, populationSize);
 		UniformMutation mutation = new UniformMutation(probabilityOfMutation);
 		Recombination recombination = new DiscreteRecombination();
 		SurvivorSelection survivorSelection = new ReplaceAllSurvivalSelection();
@@ -113,6 +119,9 @@ public class player58 implements ContestSubmission
 			}
 
         }
+        // Last step stats
+		onlineFitnessStatisticsPrinter.printStats(previousGeneration);
+        onlineFitnessStatisticsPrinter.close();
 
 	}
 }
