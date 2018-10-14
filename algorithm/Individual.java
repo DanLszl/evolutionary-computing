@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class Individual {
     private double[] genotype = new double[10];
-    private double[] stepsize = new double[10];
+    private Double stepsize = null;
     private Double fitness = null;
 
     public Individual() {
@@ -14,16 +14,15 @@ public class Individual {
         for (int i = 0; i < 10; i++) {
             double r = rand.nextDouble();
             genotype[i] = (r * 10) - 5;
-
-            stepsize[i] = rand.nextGaussian();;
         }
+        stepsize = rand.nextGaussian();
     }
 
     public Individual(Individual other) {
         for (int i = 0; i < 10; i++) {
             this.genotype[i] = other.genotype[i];
-            this.stepsize[i] = other.stepsize[i];
         }
+        this.stepsize = other.stepsize;
     }
 
     public void evaluate(ContestEvaluation evaluation) {
@@ -43,10 +42,10 @@ public class Individual {
         fitness = null;
     }
 
-    public double getSigma(int i) { return stepsize[i]; }
+    public double getSigma(int i) { return stepsize; }
 
     public void setSigma(int i, double value) {
-        stepsize[i] = value;
+        stepsize = value;
     }
 
     public int genotypeLength() {
