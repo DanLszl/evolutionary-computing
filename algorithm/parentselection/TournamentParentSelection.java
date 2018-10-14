@@ -6,7 +6,7 @@ import algorithm.Population;
 
 public class TournamentParentSelection implements ParentSelection {
 
-    private final int tournamentSize;
+    protected int tournamentSize;
 
     public TournamentParentSelection(int tournamentSize) {
         this.tournamentSize = tournamentSize;
