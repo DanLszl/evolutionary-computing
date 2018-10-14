@@ -31,6 +31,9 @@ public class DiscreteRecombination implements Recombination {
                     childA.setSigma(i, parentA.getSigma(i));
                     childB.setSigma(i, parentB.getSigma(i));
                 } else {
+                    childA.setAllele(i, parentB.getAllele(i));
+                    childB.setAllele(i, parentA.getAllele(i));
+
                     childA.setSigma(i, parentB.getSigma(i));
                     childB.setSigma(i, parentA.getSigma(i));
                 }
