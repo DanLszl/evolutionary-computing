@@ -33,6 +33,16 @@ public class DiscreteRecombination implements Recombination {
                 }
             }
 
+
+            if (cutIndex <= 5){
+                childA.setSigma(parentA.getSigma());
+                childB.setSigma(parentB.getSigma());
+            } else {
+                childA.setSigma(parentB.getSigma());
+                childB.setSigma(parentA.getSigma());
+            }
+
+
             offspring.add(childA);
             offspring.add(childB);
         }

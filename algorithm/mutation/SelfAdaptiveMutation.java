@@ -26,13 +26,13 @@ public class SelfAdaptiveMutation extends Mutation {
         for (Individual i : mutated.getIndividuals()) {
             double pOverall = rand.nextGaussian();
 
+            double deltaSigma = Math.exp(overallTau*pOverall);
+            double newSigma = checkSigma(i.getSigma() * deltaSigma);
+            i.setSigma(newSigma);
+
             for (int j = 0; j < i.genotypeLength(); j++) {
 
-                double deltaSigma = Math.exp(overallTau*pOverall);
-                double newSigma = checkSigma(i.getSigma(j) * deltaSigma);
-                i.setSigma(j, newSigma);
-
-                double deltaValue = rand.nextGaussian()*newSigma;
+                double deltaValue = rand.nextGaussian()*i.getSigma();
                 double newValue = checkBoundaries(i.getAllele(j) + deltaValue);
                 i.setAllele(j, newValue);
             }

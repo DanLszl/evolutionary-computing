@@ -42,9 +42,9 @@ public class Individual {
         fitness = null;
     }
 
-    public double getSigma(int i) { return stepsize; }
+    public double getSigma() { return stepsize; }
 
-    public void setSigma(int i, double value) {
+    public void setSigma(double value) {
         stepsize = value;
     }
 

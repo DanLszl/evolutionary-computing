@@ -81,7 +81,7 @@ public class player58 implements ContestSubmission
 		int tournamentSizeB = 2;
 		double blendAlpha = 0;
 
-		//mutatioin parameters
+		//mutation parameters
 		double probabilityOfMutation = 0.1;
 		double sigma = 0.1;
 		double lowerBoundary = -5.0;
@@ -94,7 +94,8 @@ public class player58 implements ContestSubmission
 		//UniformMutation mutation = new UniformMutation(probabilityOfMutation,lowerBoundary,upperBoundary);
 		//NonUniformMutation mutation = new NonUniformMutation(sigma,lowerBoundary,upperBoundary);
 		SelfAdaptiveMutation mutation = new SelfAdaptiveMutation(threshold,hardness,lowerBoundary,upperBoundary);
-		Recombination recombination = new BlendRecombination(blendAlpha);
+		//Recombination recombination = new BlendRecombination(blendAlpha);
+		Recombination recombination = new DiscreteRecombination();
 		SurvivorSelection survivorSelection = new ReplaceAllSurvivalSelection();
 		TerminationCriteria terminationCriteria = new NoTerminationCriteria();
 
