@@ -2,6 +2,7 @@ import algorithm.initialization.Initialization;
 import algorithm.Population;
 import algorithm.initialization.RandomInitialization;
 import algorithm.mutation.NonUniformMutation;
+import algorithm.mutation.SelfAdaptiveMutation;
 import algorithm.mutation.UniformMutation;
 import algorithm.parentselection.AllParentSelection;
 import algorithm.parentselection.ParentSelection;
@@ -85,11 +86,14 @@ public class player58 implements ContestSubmission
 		double sigma = 0.1;
 		double lowerBoundary = -5.0;
 		double upperBoundary = 5.0;
+		double threshlod = 0.001;
+		double hardness = 10.0;
 
 		Initialization initialization = new RandomInitialization(populationSize);
 		// Parent selection is moved inside the actual algorithm
 		//UniformMutation mutation = new UniformMutation(probabilityOfMutation,lowerBoundary,upperBoundary);
-		NonUniformMutation mutation = new NonUniformMutation(sigma,lowerBoundary,upperBoundary);
+		//NonUniformMutation mutation = new NonUniformMutation(sigma,lowerBoundary,upperBoundary);
+		SelfAdaptiveMutation mutation = new SelfAdaptiveMutation(threshlod,hardness,lowerBoundary,upperBoundary);
 		Recombination recombination = new BlendRecombination(blendAlpha);
 		SurvivorSelection survivorSelection = new ReplaceAllSurvivalSelection();
 		TerminationCriteria terminationCriteria = new NoTerminationCriteria();
