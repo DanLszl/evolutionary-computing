@@ -4,9 +4,7 @@ import algorithm.initialization.RandomInitialization;
 import algorithm.mutation.NonUniformMutation;
 import algorithm.mutation.SelfAdaptiveMutation;
 import algorithm.mutation.UniformMutation;
-import algorithm.parentselection.AllParentSelection;
-import algorithm.parentselection.ParentSelection;
-import algorithm.parentselection.TournamentParentSelection;
+import algorithm.parentselection.*;
 import algorithm.survivalselection.ReplaceAllSurvivalSelection;
 import algorithm.survivalselection.SurvivorSelection;
 import algorithm.survivalselection.TournamentSurvivalSelection;
@@ -81,7 +79,7 @@ public class player58 implements ContestSubmission
 		int tournamentSizeB = 2;
 		double blendAlpha = 0;
 
-		//mutatioin parameters
+		//mutation parameters
 		double probabilityOfMutation = 0.1;
 		double sigma = 0.1;
 		double lowerBoundary = -5.0;
@@ -89,8 +87,28 @@ public class player58 implements ContestSubmission
 		double threshlod = 0.001;
 		double hardness = 10.0;
 
+        // Linear tournament size parameters
+        int tournamentSizeStart = 3;
+        int tournamentSizeEnd = 25;
+        int tournamentSizeGenerations = 3000;
+        int numberOfShocks = 10;
+        int stepsOnMaxSize = 20;
+
+
 		Initialization initialization = new RandomInitialization(populationSize);
-		// Parent selection is moved inside the actual algorithm
+
+		 // Parent selection is moved inside the actual algorithm
+//         ParentSelection parentSelection = new AdaptiveTournamentParentSelection(
+//                tournamentSizeStart, tournamentSizeEnd, tournamentSizeGenerations);
+
+         ParentSelection parentSelection = new ShockedAdaptiveTournamentParentSelection(
+                 tournamentSizeStart,
+                 tournamentSizeEnd,
+                 tournamentSizeGenerations,
+                 numberOfShocks,
+                 stepsOnMaxSize
+                 );
+
 		//UniformMutation mutation = new UniformMutation(probabilityOfMutation,lowerBoundary,upperBoundary);
 		//NonUniformMutation mutation = new NonUniformMutation(sigma,lowerBoundary,upperBoundary);
 		SelfAdaptiveMutation mutation = new SelfAdaptiveMutation(threshlod,hardness,lowerBoundary,upperBoundary);
@@ -106,21 +124,11 @@ public class player58 implements ContestSubmission
 		previousGeneration.evaluate(evaluation_);
 		int evals = populationSize;
 
-		int generations = 0;
-
-		// Linear tournament size setter
-		int tournamentSizeStart = 3;
-		int tournamentSizeEnd = 25;
-		int tournamentSizeGenerations = 3000;
-
+        int generation = 0;
         while(evals < evaluations_limit_){
+            // System.out.println(generation++);
 
-			int tournamentSize = (generations * (tournamentSizeEnd - tournamentSizeStart)) / tournamentSizeGenerations + tournamentSizeStart;
-
-			ParentSelection parentSelection = new TournamentParentSelection(tournamentSize);
-
-			System.out.println(evals);
-			onlineFitnessStatisticsPrinter.printStats(previousGeneration);
+			// onlineFitnessStatisticsPrinter.printStats(previousGeneration);
         	// Select parents
 
 			Population parents = parentSelection.selectParents(previousGeneration);
@@ -138,9 +146,6 @@ public class player58 implements ContestSubmission
 
 			evals += nextGeneration.size();
 
-			generations += 1;
-
-			System.out.println(generations);
 
 			previousGeneration = nextGeneration;
 
