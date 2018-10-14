@@ -17,6 +17,7 @@ import algorithm.recombination.Recombination;
 import algorithm.terminationcriteria.NoTerminationCriteria;
 import algorithm.terminationcriteria.TerminationCriteria;
 import algorithm.statistics.OnlineFitnessStatisticsPrinter;
+import parametertuning.Parameters;
 
 
 import java.util.Random;
@@ -69,9 +70,17 @@ public class player58 implements ContestSubmission
 
 	public void run()
 	{
+		// Collect parameters here
+        int dummy = Parameters.getDummy();
+        System.out.println(dummy);
+        int dummy2 = Parameters.getDummy2();
+        System.out.println(dummy2);
+
+
 		// Run your algorithm here
 
 		System.out.println(evaluations_limit_);
+
 
 		OnlineFitnessStatisticsPrinter onlineFitnessStatisticsPrinter = new OnlineFitnessStatisticsPrinter();
 
@@ -145,6 +154,8 @@ public class player58 implements ContestSubmission
 			}
 
         }
+
+
 
 	}
 }
