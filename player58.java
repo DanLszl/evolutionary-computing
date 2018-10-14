@@ -68,7 +68,9 @@ public class player58 implements ContestSubmission
 
 		System.out.println(evaluations_limit_);
 
-		OnlineFitnessStatisticsPrinter onlineFitnessStatisticsPrinter = new OnlineFitnessStatisticsPrinter();
+		boolean printStatistics = false;
+
+		OnlineFitnessStatisticsPrinter onlineFitnessStatisticsPrinter = new OnlineFitnessStatisticsPrinter(printStatistics);
 
 		int populationSize = 100;
 		double probabilityOfMutation = 0.5;
