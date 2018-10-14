@@ -39,20 +39,24 @@ public class BlendRecombination implements Recombination {
 
             int genomeLength = parentA.genotypeLength();
 
-
             for(int i=0; i<genomeLength; i++){
 
                 double parentDifference = Math.abs(parentA.getAllele(i)-parentB.getAllele(i));
+                double bottomAllele = Math.min(parentA.getAllele(i), parentB.getAllele(i)) - blendAlpha*parentDifference;
+                double topAllele = Math.max(parentA.getAllele(i), parentB.getAllele(i)) + blendAlpha*parentDifference;
 
-                double bottom = Math.min(parentA.getAllele(i), parentB.getAllele(i) - blendAlpha*parentDifference;
-                double top = Math.max(parentA.getAllele(i), parentB.getAllele(i) + blendAlpha*parentDifference;
+                childA.setAllele(i, rand.nextDouble()*(topAllele-bottomAllele) + bottomAllele);
+                childB.setAllele(i, rand.nextDouble()*(topAllele-bottomAllele) + bottomAllele);
 
-                double firstChildNewAllele = rand.nextDouble(bottom, top);
-                childA.setAllele(i, firstChildNewAllele);
+                double sigmaDifference = Math.abs(parentA.getSigma(i)-parentB.getSigma(i));
+                double bottomSigma = Math.min(parentA.getSigma(i), parentB.getSigma(i)) - blendAlpha*sigmaDifference;
+                double topSigma = Math.max(parentA.getSigma(i), parentB.getSigma(i)) + blendAlpha*sigmaDifference;
 
-                double secondChildNewAllele = rand.nextDouble(bottom, top);
-                childB.setAllele(i, secondChildNewAllele);
-
+                childA.setSigma(i, rand.nextDouble()*(topSigma-bottomSigma) + bottomSigma);
+                childB.setSigma(i, rand.nextDouble()*(topSigma-bottomSigma) + bottomSigma);
+                if (Math.abs(childB.getSigma(i)) > 1000) {
+                    System.out.println(childB.getSigma(i));
+                }
             }
 
             offspring.add(childA);

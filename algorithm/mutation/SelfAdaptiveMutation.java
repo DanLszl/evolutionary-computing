@@ -40,7 +40,6 @@ public class SelfAdaptiveMutation extends Mutation {
                 i.setAllele(j, newValue);
             }
         }
-        //TODO check if correct
         return mutated;
     }
 

@@ -77,14 +77,14 @@ public class player58 implements ContestSubmission
 		int populationSize = 100;
 		int tournamentSizeA = 25;
 		int tournamentSizeB = 2;
-		double blendAlpha = 0.5;
+		double blendAlpha = 0.3;
 
 		//mutation parameters
 		double probabilityOfMutation = 0.1;
 		double sigma = 0.1;
 		double lowerBoundary = -5.0;
 		double upperBoundary = 5.0;
-		double threshold = 0.01;
+		double threshold = 0.001;
 		double hardness = 10.0;
 
         // Linear tournament size parameters
