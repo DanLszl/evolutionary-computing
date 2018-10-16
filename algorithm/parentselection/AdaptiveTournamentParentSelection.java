@@ -7,8 +7,8 @@ public class AdaptiveTournamentParentSelection extends TournamentParentSelection
 
     int tournamentSizeStart;
     protected int tournamentSizeEnd;
-    int tournamentSizeGenerations;
-    int generations = 0;
+    protected int tournamentSizeGenerations;
+    protected int generations = 0;
 
 
     public AdaptiveTournamentParentSelection(int tournamentSizeStart, int tournamentSizeEnd, int tournamentSizeGenerations) {
@@ -22,24 +22,20 @@ public class AdaptiveTournamentParentSelection extends TournamentParentSelection
     @Override
     public Population selectParents(Population previousPopulation) {
         updateTournamentSize();
-        return super.selectParents(previousPopulation);
+        Population parents = super.selectParents(previousPopulation);
+        return parents;
     }
 
-
-
     protected void updateTournamentSize() {
-        tournamentSize = (generations  * (tournamentSizeEnd - tournamentSizeStart)) / tournamentSizeGenerations + tournamentSizeStart;
-
+        tournamentSize = (generations * (tournamentSizeEnd-tournamentSizeStart)) / tournamentSizeGenerations + tournamentSizeStart;
+        generations += 1;
         if (tournamentSize > tournamentSizeEnd) {
             tournamentSize = tournamentSizeEnd;
         }
-        generations += 1;
-
     }
 
     public void reset() {
         tournamentSize = tournamentSizeStart;
         generations = 0;
-        // System.out.println("Resetting, generations:" + Integer.toString(generations) + "Tournament size: " + Integer.toString(tournamentSizeEnd));
     }
 }
