@@ -8,6 +8,7 @@ import algorithm.mutation.UniformMutation;
 
 import algorithm.parentselection.*;
 import algorithm.shocking.ShockedAdaptiveTournamentParentSelection;
+import algorithm.shocking.ShockedSelfAdaptiveMutation;
 import algorithm.survivalselection.ReplaceAllSurvivalSelection;
 import algorithm.survivalselection.SurvivorSelection;
 import org.vu.contest.ContestSubmission;
@@ -111,7 +112,13 @@ public class player58 implements ContestSubmission
                  );
 
 
-		SelfAdaptiveMutation mutation = new SelfAdaptiveMutation(threshold,hardness,lowerBoundary,upperBoundary);
+
+
+		// UniformMutation mutation = new UniformMutation(probabilityOfMutation,lowerBoundary,upperBoundary);
+		// NonUniformMutation mutation = new NonUniformMutation(sigma,lowerBoundary,upperBoundary);
+		// SelfAdaptiveMutation mutation = new SelfAdaptiveMutation(threshold,hardness,lowerBoundary,upperBoundary);
+		ShockedSelfAdaptiveMutation mutation = new ShockedSelfAdaptiveMutation(threshold,hardness,lowerBoundary,upperBoundary, 100);
+
 		Recombination recombination = new BlendRecombination(blendAlpha);
 		SurvivorSelection survivorSelection = new ReplaceAllSurvivalSelection();
 		TerminationCriteria terminationCriteria = new NoTerminationCriteria();
