@@ -2,10 +2,11 @@ package algorithm.parentselection;
 
 import algorithm.Population;
 
-public class AdaptiveTournamentParentSelection extends TournamentParentSelection implements AdaptiveSelection {
+
+public class AdaptiveTournamentParentSelection extends TournamentParentSelection {
 
     int tournamentSizeStart;
-    int tournamentSizeEnd;
+    protected int tournamentSizeEnd;
     int tournamentSizeGenerations;
     int generations = 0;
 
@@ -36,7 +37,6 @@ public class AdaptiveTournamentParentSelection extends TournamentParentSelection
 
     }
 
-    @Override
     public void reset() {
         tournamentSize = tournamentSizeStart;
         generations = 0;

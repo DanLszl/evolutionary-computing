@@ -1,4 +1,6 @@
-package algorithm.parentselection;
+package algorithm.shocking;
+
+import algorithm.parentselection.AdaptiveTournamentParentSelection;
 
 public class ShockedAdaptiveTournamentParentSelection extends AdaptiveTournamentParentSelection {
 
