@@ -76,8 +76,8 @@ public class player58 implements ContestSubmission
 
 		System.out.println("Evaluations limit: " + Integer.toString(evaluations_limit_));
 
-        boolean printStatistics = false;
-		OnlineFitnessStatisticsPrinter onlineFitnessStatisticsPrinter = new OnlineFitnessStatisticsPrinter();	// TODO refactor to csv
+        boolean printStatistics = true;
+		OnlineFitnessStatisticsPrinter onlineFitnessStatisticsPrinter = new OnlineFitnessStatisticsPrinter(printStatistics);	// TODO refactor to csv
 
 		int populationSize = Parameters.getpopulationSize() == null ? 100 : Parameters.getpopulationSize();
 		double blendAlpha = Parameters.getblendAlpha() == null ? 0.3 : Parameters.getblendAlpha();
@@ -89,7 +89,7 @@ public class player58 implements ContestSubmission
 		double upperBoundary = 5.0;		// THIS IS NOT A PARAMETER!
 		double threshold = Parameters.getsigmaThreshold() == null ? 0.001 : Parameters.getsigmaThreshold();
 		double hardness = 10.0;		// THIS IS NOT A PARAMETER!
-        
+
 
         // Linear tournament size parameters
         int tournamentSizeStart = Parameters.gettournamentSizeStart() == null ? 5 : Parameters.gettournamentSizeStart();
@@ -157,7 +157,7 @@ public class player58 implements ContestSubmission
         while(evals < evaluations_limit_){
             // System.out.println(generation++);
 
-			// onlineFitnessStatisticsPrinter.printStats(previousGeneration);
+			onlineFitnessStatisticsPrinter.printStats(previousGeneration);
 
 			// Select parents
 			Population parents = parentSelection.selectParents(previousGeneration);

@@ -54,9 +54,9 @@ public class BlendRecombination implements Recombination {
 
                 childA.setSigma(i, rand.nextDouble()*(topSigma-bottomSigma) + bottomSigma);
                 childB.setSigma(i, rand.nextDouble()*(topSigma-bottomSigma) + bottomSigma);
-                if (Math.abs(childB.getSigma(i)) > 1000) {
-                    System.out.println(childB.getSigma(i));
-                }
+                //if (Math.abs(childB.getSigma(i)) > 1000) {
+                //    System.out.println(childB.getSigma(i));
+                //}
             }
 
             offspring.add(childA);

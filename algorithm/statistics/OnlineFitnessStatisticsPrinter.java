@@ -17,8 +17,7 @@ public class OnlineFitnessStatisticsPrinter {
     public OnlineFitnessStatisticsPrinter(boolean printAll) {
         this.printAll = printAll;
         if (printAll) {
-            System.out.println("coloumns = ['best', 'worst', 'avg', 'median'");
-            System.out.println("data = np.array([");
+            System.out.println("best, worst, avg, median");
         }
     }
 
@@ -39,22 +38,15 @@ public class OnlineFitnessStatisticsPrinter {
             Double avg = sum / fitnessValues.size();
             Double median = fitnessValues.get(fitnessValues.size() / 2);
 
-            System.out.print("[");
             System.out.print(best); System.out.print(", ");
             System.out.print(worst); System.out.print(", ");
             System.out.print(avg); System.out.print(", ");
-            System.out.print(median);
-            System.out.println("],");
-
+            System.out.println(median);
 
             worstHistory.add(worst);
             bestHistory.add(best);
             avgHistory.add(avg);
             medianHistory.add(median);
         }
-    }
-
-    public void close() {
-        System.out.println("])");
     }
 }

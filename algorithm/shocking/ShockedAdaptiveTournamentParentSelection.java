@@ -16,7 +16,6 @@ public class ShockedAdaptiveTournamentParentSelection extends AdaptiveTournament
     protected void updateTournamentSize() {
         if (generations > tournamentSizeGenerations) {
             reset(); // Introducing shocks
-            System.out.println("Reset");
         } else {
             super.updateTournamentSize();
         }
