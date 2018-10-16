@@ -26,10 +26,6 @@ public class BlendRecombination implements Recombination {
         // This for loop is misleading. It actually creates two new children
         for(int offspringSize = 0; offspringSize < parents.size()/2; offspringSize++) {
 
-            double u = Math.random();
-
-            double gamma = (1 - 2*blendAlpha) * u - blendAlpha;
-
             // Selects first parent
             int selectedIndex = rand.nextInt(parents.size());
             Individual parentA = parents.getIndividuals().get(selectedIndex);
@@ -43,38 +39,24 @@ public class BlendRecombination implements Recombination {
 
             int genomeLength = parentA.genotypeLength();
 
-            // Create a list to hold the bottom values
-            List<Double> blendGenotypeBottom = new ArrayList<>();
-
-            // Create a list to hold the top values
-            List<Double> blendGenotypeTop = new ArrayList<>();
-
-
-
             for(int i=0; i<genomeLength; i++){
 
                 double parentDifference = Math.abs(parentA.getAllele(i)-parentB.getAllele(i));
+                double bottomAllele = Math.min(parentA.getAllele(i), parentB.getAllele(i)) - blendAlpha*parentDifference;
+                double topAllele = Math.max(parentA.getAllele(i), parentB.getAllele(i)) + blendAlpha*parentDifference;
 
-                // If the alleles are the same, it doesn't matter which parent you choose to be the biggest or lowest
+                childA.setAllele(i, rand.nextDouble()*(topAllele-bottomAllele) + bottomAllele);
+                childB.setAllele(i, rand.nextDouble()*(topAllele-bottomAllele) + bottomAllele);
 
-                if (parentA.getAllele(i) >= parentB.getAllele(i)){
-                    blendGenotypeBottom.add(parentB.getAllele(i)-(blendAlpha*parentDifference));
-                    blendGenotypeTop.add(parentA.getAllele(i)+(blendAlpha*parentDifference));
-                } else if (parentA.getAllele(i) < parentB.getAllele(i)){
-                    blendGenotypeBottom.add(parentA.getAllele(i)-(blendAlpha*parentDifference));
-                    blendGenotypeTop.add(parentB.getAllele(i)+(blendAlpha*parentDifference));
+                double sigmaDifference = Math.abs(parentA.getSigma(i)-parentB.getSigma(i));
+                double bottomSigma = Math.min(parentA.getSigma(i), parentB.getSigma(i)) - blendAlpha*sigmaDifference;
+                double topSigma = Math.max(parentA.getSigma(i), parentB.getSigma(i)) + blendAlpha*sigmaDifference;
+
+                childA.setSigma(i, rand.nextDouble()*(topSigma-bottomSigma) + bottomSigma);
+                childB.setSigma(i, rand.nextDouble()*(topSigma-bottomSigma) + bottomSigma);
+                if (Math.abs(childB.getSigma(i)) > 1000) {
+                    System.out.println(childB.getSigma(i));
                 }
-
-                // in some uniform way choose a value from the above
-
-                double firstValueToSet = Math.random()*(blendGenotypeTop.get(i)-blendGenotypeBottom.get(i)) + blendGenotypeBottom.get(i);
-
-                childA.setAllele(i, firstValueToSet);
-
-                double secondValueToSet = Math.random()*(blendGenotypeTop.get(i)-blendGenotypeBottom.get(i)) + blendGenotypeBottom.get(i);
-
-                childB.setAllele(i, secondValueToSet);
-
             }
 
             offspring.add(childA);
