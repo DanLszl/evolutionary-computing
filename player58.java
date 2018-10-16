@@ -1,18 +1,25 @@
 import algorithm.initialization.Initialization;
 import algorithm.Population;
 import algorithm.initialization.RandomInitialization;
+import algorithm.mutation.NonUniformMutation;
+
+import algorithm.mutation.SelfAdaptiveMutation;
 import algorithm.mutation.UniformMutation;
-import algorithm.parentselection.ParentSelection;
-import algorithm.parentselection.TournamentParentSelection;
+
+import algorithm.parentselection.*;
+import algorithm.shocking.ShockedAdaptiveTournamentParentSelection;
+import algorithm.shocking.ShockedSelfAdaptiveMutation;
 import algorithm.survivalselection.ReplaceAllSurvivalSelection;
 import algorithm.survivalselection.SurvivorSelection;
 import org.vu.contest.ContestSubmission;
 import org.vu.contest.ContestEvaluation;
-import algorithm.recombination.DiscreteRecombination;
+import algorithm.recombination.BlendRecombination;
 import algorithm.recombination.Recombination;
 import algorithm.terminationcriteria.NoTerminationCriteria;
 import algorithm.terminationcriteria.TerminationCriteria;
 import algorithm.statistics.OnlineFitnessStatisticsPrinter;
+import parametertuning.Parameters;
+
 
 import java.util.Random;
 import java.util.Properties;
@@ -62,59 +69,115 @@ public class player58 implements ContestSubmission
     }
 
 
+	// Run your algorithm here
 	public void run()
 	{
-		// Run your algorithm here
+		/** Collect parameters */
 
-		System.out.println(evaluations_limit_);
+		System.out.println("Evaluations limit: " + Integer.toString(evaluations_limit_));
 
-		boolean printStatistics = false;
+        boolean printStatistics = false;
+		OnlineFitnessStatisticsPrinter onlineFitnessStatisticsPrinter = new OnlineFitnessStatisticsPrinter();	// TODO refactor to csv
 
-		OnlineFitnessStatisticsPrinter onlineFitnessStatisticsPrinter = new OnlineFitnessStatisticsPrinter(printStatistics);
+		int populationSize = Parameters.getpopulationSize() == null ? 100 : Parameters.getpopulationSize();
+		double blendAlpha = Parameters.getblendAlpha() == null ? 0.3 : Parameters.getblendAlpha();
 
-		int populationSize = 100;
-		double probabilityOfMutation = 0.5;
+		//mutation parameters
+		double probabilityOfMutation = 0.1;
+		double sigma = 0.1;
+		double lowerBoundary = -5.0;	// THIS IS NOT A PARAMETER!
+		double upperBoundary = 5.0;		// THIS IS NOT A PARAMETER!
+		double threshold = Parameters.getsigmaThreshold() == null ? 0.001 : Parameters.getsigmaThreshold();
+		double hardness = 10.0;		// THIS IS NOT A PARAMETER!
+        
 
+        // Linear tournament size parameters
+        int tournamentSizeStart = Parameters.gettournamentSizeStart() == null ? 5 : Parameters.gettournamentSizeStart();
+        int tournamentSizeEnd = Parameters.gettournamentSizeEnd() == null ? 25 : Parameters.gettournamentSizeEnd();
+        int tournamentSizeGenerations = Parameters.gettournamentGenerations() == null ? 200 : Parameters.gettournamentGenerations();
+        int shockInterval = Parameters.getshockInterval() == null ? 40 : Parameters.getshockInterval();
+
+
+
+
+        // Initializing the algorithms components
 		Initialization initialization = new RandomInitialization(populationSize);
-		ParentSelection parentSelection = new TournamentParentSelection(20);
-		UniformMutation mutation = new UniformMutation(probabilityOfMutation);
-		Recombination recombination = new DiscreteRecombination();
+
+		ParentSelection parentSelection = null;
+
+		Boolean flag = Parameters.getuseShockingForTournament();
+        if (flag == null || flag == true) {
+            parentSelection = new ShockedAdaptiveTournamentParentSelection(
+                    tournamentSizeStart,
+                    tournamentSizeEnd,
+                    shockInterval
+            );
+        } else {
+            parentSelection = new AdaptiveTournamentParentSelection(
+                    tournamentSizeStart,
+                    tournamentSizeEnd,
+                    tournamentSizeGenerations
+            );
+        }
+
+
+
+		// UniformMutation mutation = new UniformMutation(probabilityOfMutation,lowerBoundary,upperBoundary);
+		// NonUniformMutation mutation = new NonUniformMutation(sigma,lowerBoundary,upperBoundary);
+        SelfAdaptiveMutation mutation = null;
+        flag = Parameters.getuseShockingForMutation();
+        if (flag == null || flag == true) {
+            mutation = new ShockedSelfAdaptiveMutation(
+                    threshold,
+                    hardness,
+                    lowerBoundary,
+                    upperBoundary,
+                    shockInterval
+            );
+        } else {
+            mutation = new SelfAdaptiveMutation(threshold,hardness,lowerBoundary,upperBoundary);
+        }
+
+		Recombination recombination = new BlendRecombination(blendAlpha);
 		SurvivorSelection survivorSelection = new ReplaceAllSurvivalSelection();
 		TerminationCriteria terminationCriteria = new NoTerminationCriteria();
 
 
-		// init population
+
+		/** The algorithm itself */
+
+		// initial population
 		Population previousGeneration = initialization.initialize();
 
 		// evaluate initial population
 		previousGeneration.evaluate(evaluation_);
 		int evals = populationSize;
 
+        int generation = 0;
         while(evals < evaluations_limit_){
-			onlineFitnessStatisticsPrinter.printStats(previousGeneration);
-        	// Select parents
+            // System.out.println(generation++);
+
+			// onlineFitnessStatisticsPrinter.printStats(previousGeneration);
+
+			// Select parents
 			Population parents = parentSelection.selectParents(previousGeneration);
 
 			// Apply crossover / mutation operators
 			Population offspring = recombination.recombine(parents);
-
 			Population mutatedOffspring = mutation.mutate(offspring);
+
 			// Evaluate fitness of the offspring population
 			mutatedOffspring.evaluate(evaluation_);
 
 			// Select survivors
 			Population nextGeneration = survivorSelection.selectSurvivors(previousGeneration, mutatedOffspring);
 
-
 			evals += nextGeneration.size();
-
 			previousGeneration = nextGeneration;
 
 			if (terminationCriteria.shouldTerminate(nextGeneration)) {
 				break;
 			}
-
         }
-
 	}
 }
