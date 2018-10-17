@@ -15,7 +15,7 @@ public class Individual {
             double r = rand.nextDouble();
             genotype[i] = (r * 10) - 5;
 
-            stepsize[i] = rand.nextGaussian();;
+            stepsize[i] = rand.nextGaussian();
         }
     }
 
