@@ -32,7 +32,6 @@ s = 'SchaffersEvaluation'
 k = 'KatsuuraEvaluation'
 
 selected_evaluation_function = b
-
 # For parameter tuning the seed is going to be always the same
 seed = 1
 
@@ -41,50 +40,72 @@ seed = 1
 use_shocking_for_tournament = False
 use_shocking_for_mutation = False
 
-shock_intervals = [50, 100, 200]
+if use_shocking_for_mutation or use_shocking_for_tournament:
+    shock_intervals = [200, 213, 1234]
 
 # Population initialization
 ## Choose population sizes
-population_sizes = [50, 100, 500]
+population_sizes = [100, 200, 400]
 
 # Recombination
 ## Choose blend alphas
 blend_alpha = [0.3, 0.5, 0.7]
 
 ## Choose sigma threshold
-sigma_thresholds = [0.001, 0.01, 0.1]
+sigma_thresholds = [0.01, 0.1, 0.15]
 
 # ParentSelection
 ## Tournament
-tournament_size_starts_ends =   [(3, 25),
-                                 (2, 50),
-                                 (10, 40)]
+tournament_size_starts_ends = [(2, 6),
+                               (2, 12),
+                               (2, 20)]
 
 ### TODO need to calculate these somehow
-generations_in_which_tournament_size_becomes_max = [3000, 6000, 10000]
+generations_in_which_tournament_size_becomes_max = [1000, 2000, 5000]
 
-
-
-parameters_values = itertools.product([use_shocking_for_tournament],
+if use_shocking_for_mutation or use_shocking_for_tournament:
+    parameters_values = itertools.product(
+                                [use_shocking_for_tournament],
+                                [use_shocking_for_mutation],
+                                shock_intervals,
+                                population_sizes,
+                                blend_alpha,
+                                sigma_thresholds,
+                                generations_in_which_tournament_size_becomes_max,
+                                tournament_size_starts_ends
+                                )
+    parameter_names = [
+                    'useShockingForTournament',
+                    'useShockingForMutation',
+                    'shockInterval',
+                    'populationSize',
+                    'blendAlpha',
+                    'sigmaThreshold',
+                    'tournamentGenerations',
+                    'tournamentSizeStart',
+                    'tournamentSizeEnd']
+else:
+    parameters_values = itertools.product([use_shocking_for_tournament],
                                   [use_shocking_for_mutation],
-                                  shock_intervals,
+                                  #shock_intervals,
                                   population_sizes,
                                   blend_alpha,
                                   sigma_thresholds,
                                   generations_in_which_tournament_size_becomes_max,
                                   tournament_size_starts_ends)
+    parameter_names = [
+                    'useShockingForTournament',
+                    'useShockingForMutation',
+                    #'shockInterval',
+                    'populationSize',
+                    'blendAlpha',
+                    'sigmaThreshold',
+                    'tournamentGenerations',
+                    'tournamentSizeStart',
+                    'tournamentSizeEnd']
+
 
 parameters_values = [rest + [t_s_e[0], t_s_e[1]] for *rest, t_s_e in parameters_values]
-
-parameter_names = ['useShockingForTournament',
-                   'useShockingForMutation',
-                   'shockInterval',
-                   'populationSize',
-                   'blendAlpha',
-                   'sigmaThreshold',
-                   'tournamentGenerations',
-                   'tournamentSizeStart',
-                   'tournamentSizeEnd']
 
 parameter_names = [''.join(['-D', i]) for i in parameter_names]
 
