@@ -49,12 +49,12 @@ public class BlendRecombination implements Recombination {
                 childB.setAllele(i, rand.nextDouble()*(topAllele-bottomAllele) + bottomAllele);
 
                 double sigmaDifference = Math.abs(parentA.getSigma()-parentB.getSigma());
-                double bottomSigma = Math.min(parentA.getSigma(), parentB.getSigma()) - blendAlpha*sigmaDifference;
-                double topSigma = Math.max(parentA.getSigma(), parentB.getSigma()) + blendAlpha*sigmaDifference;
+                double bottomSigma = Math.min(parentA.getSigma(), parentB.getSigma());
+                double topSigma = Math.max(parentA.getSigma(), parentB.getSigma());
 
 
-                childA.setSigma(rand.nextDouble()*(topSigma-bottomSigma) + bottomSigma);
-                childB.setSigma(rand.nextDouble()*(topSigma-bottomSigma) + bottomSigma);
+                childA.setSigma(parentA.getSigma());
+                childB.setSigma(parentB.getSigma());
                 //if (Math.abs(childB.getSigma(i)) > 1000) {
                 //    System.out.println(childB.getSigma(i));
                 //}

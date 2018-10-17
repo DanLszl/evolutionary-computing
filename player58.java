@@ -88,14 +88,14 @@ public class player58 implements ContestSubmission
 		double sigma = 0.1;
 		double lowerBoundary = -5.0;	// THIS IS NOT A PARAMETER!
 		double upperBoundary = 5.0;		// THIS IS NOT A PARAMETER!
-		double threshold = Parameters.getsigmaThreshold() == null ? 0.001 : Parameters.getsigmaThreshold();
+		double threshold = Parameters.getsigmaThreshold() == null ? 0.01 : Parameters.getsigmaThreshold();
 		double hardness = 10.0;		// THIS IS NOT A PARAMETER!
 
 
         // Linear tournament size parameters
-        int tournamentSizeStart = Parameters.gettournamentSizeStart() == null ? 5 : Parameters.gettournamentSizeStart();
-        int tournamentSizeEnd = Parameters.gettournamentSizeEnd() == null ? 25 : Parameters.gettournamentSizeEnd();
-        int tournamentSizeGenerations = Parameters.gettournamentGenerations() == null ? 200 : Parameters.gettournamentGenerations();
+        int tournamentSizeStart = Parameters.gettournamentSizeStart() == null ? 2 : Parameters.gettournamentSizeStart();
+        int tournamentSizeEnd = Parameters.gettournamentSizeEnd() == null ? 6 : Parameters.gettournamentSizeEnd();
+        int tournamentSizeGenerations = Parameters.gettournamentGenerations() == null ? 1000 : Parameters.gettournamentGenerations();
         int shockInterval = Parameters.getshockInterval() == null ? 40 : Parameters.getshockInterval();
 
 
@@ -139,8 +139,8 @@ public class player58 implements ContestSubmission
             mutation = new SelfAdaptiveMutation(threshold,hardness,lowerBoundary,upperBoundary);
         }
 
-		//Recombination recombination = new BlendRecombination(blendAlpha);
-		Recombination recombination = new DiscreteRecombination();
+		Recombination recombination = new BlendRecombination(blendAlpha);
+		//Recombination recombination = new DiscreteRecombination();
 		SurvivorSelection survivorSelection = new ReplaceAllSurvivalSelection();
 		TerminationCriteria terminationCriteria = new NoTerminationCriteria();
 

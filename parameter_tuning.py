@@ -31,7 +31,7 @@ b = 'BentCigarFunction'
 s = 'SchaffersEvaluation'
 k = 'KatsuuraEvaluation'
 
-selected_evaluation_function = b
+selected_evaluation_function = k
 # For parameter tuning the seed is going to be always the same
 seed = 1
 
