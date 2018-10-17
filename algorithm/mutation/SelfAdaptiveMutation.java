@@ -16,7 +16,6 @@ public class SelfAdaptiveMutation extends Mutation {
         super(lB, uB);
         this.threshold = thr;
         this.n = n;
-        this.coordinateTau = Math.pow(Math.sqrt(2 * n), -1.0);
         this.overallTau = Math.pow(Math.sqrt(2 * Math.sqrt(n)), -1.0);
     }
 
@@ -29,11 +28,10 @@ public class SelfAdaptiveMutation extends Mutation {
             double pOverall = rand.nextGaussian();
 
             for (int j = 0; j < i.genotypeLength(); j++) {
-                double pCoodinate = rand.nextGaussian();
 
-                double deltaSigma = Math.exp(overallTau*pOverall + coordinateTau*pCoodinate);
-                double newSigma = checkSigma(i.getSigma(j) * deltaSigma);
-                i.setSigma(j, newSigma);
+                double deltaSigma = Math.exp(overallTau*pOverall);
+                double newSigma = checkSigma(i.getSigma() * deltaSigma);
+                i.setSigma(newSigma);
 
                 double deltaValue = rand.nextGaussian()*newSigma;
                 double newValue = checkBoundaries(i.getAllele(j) + deltaValue);
