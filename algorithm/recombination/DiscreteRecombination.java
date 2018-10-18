@@ -11,36 +11,28 @@ public class DiscreteRecombination implements Recombination {
         Population offspring = new Population();
 
         Random rand = new Random();
-        for(int offspringSize = 0; offspringSize < parents.size() / 2; offspringSize++) {
+        for(int offspringSize = 0; offspringSize < parents.size(); offspringSize++) {
             int selectedIndex = rand.nextInt(parents.size());
             Individual parentA = parents.getIndividuals().get(selectedIndex);
 
             selectedIndex = rand.nextInt(parents.size());
             Individual parentB = parents.getIndividuals().get(selectedIndex);
 
-            int cutIndex = rand.nextInt(11);
 
             Individual childA = new Individual();
-            Individual childB = new Individual();
 
             for (int i = 0; i < 10; i++) {
-                if (i < cutIndex) {
+                double p = rand.nextDouble();
+                if (p < 0.5) {
                     childA.setAllele(i, parentA.getAllele(i));
-                    childB.setAllele(i, parentB.getAllele(i));
-
-                    childA.setSigma(parentA.getSigma());
-                    childB.setSigma(parentB.getSigma());
                 } else {
                     childA.setAllele(i, parentB.getAllele(i));
-                    childB.setAllele(i, parentA.getAllele(i));
-
-                    childA.setSigma(parentB.getSigma());
-                    childB.setSigma(parentA.getSigma());
                 }
             }
 
+            childA.setSigma((parentA.getSigma()+parentB.getSigma())/2);
+
             offspring.add(childA);
-            offspring.add(childB);
         }
 
         return offspring;

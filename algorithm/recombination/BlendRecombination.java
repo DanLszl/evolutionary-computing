@@ -24,7 +24,7 @@ public class BlendRecombination implements Recombination {
         Random rand = new Random();
 
         // This for loop is misleading. It actually creates two new children
-        for(int offspringSize = 0; offspringSize < parents.size()/2; offspringSize++) {
+        for(int offspringSize = 0; offspringSize < parents.size(); offspringSize++) {
 
             // Selects first parent
             int selectedIndex = rand.nextInt(parents.size());
@@ -35,7 +35,6 @@ public class BlendRecombination implements Recombination {
             Individual parentB = parents.getIndividuals().get(selectedIndex);
 
             Individual childA = new Individual();
-            Individual childB = new Individual();
 
             int genomeLength = parentA.genotypeLength();
 
@@ -46,22 +45,15 @@ public class BlendRecombination implements Recombination {
                 double topAllele = Math.max(parentA.getAllele(i), parentB.getAllele(i)) + blendAlpha*parentDifference;
 
                 childA.setAllele(i, rand.nextDouble()*(topAllele-bottomAllele) + bottomAllele);
-                childB.setAllele(i, rand.nextDouble()*(topAllele-bottomAllele) + bottomAllele);
+            }
 
-                double sigmaDifference = Math.abs(parentA.getSigma()-parentB.getSigma());
-                double bottomSigma = Math.min(parentA.getSigma(), parentB.getSigma());
-                double topSigma = Math.max(parentA.getSigma(), parentB.getSigma());
+            childA.setSigma((parentA.getSigma()+parentB.getSigma())/2);
 
-
-                childA.setSigma(parentA.getSigma());
-                childB.setSigma(parentB.getSigma());
-                //if (Math.abs(childB.getSigma(i)) > 1000) {
-                //    System.out.println(childB.getSigma(i));
-                //}
+            if (Math.abs(childA.getSigma()) > 1000) {
+                System.out.println(childA.getSigma());
             }
 
             offspring.add(childA);
-            offspring.add(childB);
         }
 
         return offspring;

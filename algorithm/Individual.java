@@ -16,7 +16,8 @@ public class Individual {
             genotype[i] = (r * 10) - 5;
         }
 
-        stepsize = rand.nextGaussian();
+        stepsize = Math.abs(rand.nextGaussian());
+//        stepsize = 1.0;
     }
 
     public Individual(Individual other) {
