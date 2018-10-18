@@ -1,3 +1,4 @@
+# %%
 import subprocess
 import itertools
 from matplotlib import pyplot as plt
@@ -45,69 +46,72 @@ if use_shocking_for_mutation or use_shocking_for_tournament:
 
 # Population initialization
 ## Choose population sizes
-population_sizes = [100, 200, 400]
+population_sizes = [100, 200, 250]
 
 # Recombination
 ## Choose blend alphas
-blend_alpha = [0.3, 0.5, 0.7]
+
+recombination_type = 'discrete' # blend
+
+if recombination_type == 'blend':
+    blend_alpha = [0.3, 0.5, 0.7]
 
 ## Choose sigma threshold
-sigma_thresholds = [0.01, 0.1, 0.15]
+sigma_thresholds = [0.0001, 0.001, 0.005, 0.01]
 
 # ParentSelection
 ## Tournament
-tournament_size_starts_ends = [(2, 6),
-                               (2, 12),
-                               (2, 20)]
+tournament_size_starts_ends = [(2, 12),
+                               (2, 20),
+                               (2, 30)]
+
+
 
 ### TODO need to calculate these somehow
-generations_in_which_tournament_size_becomes_max = [1000, 2000, 5000]
+generations_in_which_tournament_size_becomes_max = [50, 500, 5000]
+
+# %%
+
+
+testable_parameter_collection = [
+                            [use_shocking_for_tournament],
+                            [use_shocking_for_mutation],
+                            population_sizes,
+                            sigma_thresholds,
+                            generations_in_which_tournament_size_becomes_max,]
+parameter_names = [
+                    'useShockingForTournament',
+                    'useShockingForMutation',
+                    'populationSize',
+                    'sigmaThreshold',
+                    'tournamentGenerations',
+                    ]
+
+if recombination_type == 'blend':
+    testable_parameter_collection.append(blend_alpha)
+    parameter_names.append(blend_alpha)
 
 if use_shocking_for_mutation or use_shocking_for_tournament:
-    parameters_values = itertools.product(
-                                [use_shocking_for_tournament],
-                                [use_shocking_for_mutation],
-                                shock_intervals,
-                                population_sizes,
-                                blend_alpha,
-                                sigma_thresholds,
-                                generations_in_which_tournament_size_becomes_max,
-                                tournament_size_starts_ends
-                                )
-    parameter_names = [
-                    'useShockingForTournament',
-                    'useShockingForMutation',
-                    'shockInterval',
-                    'populationSize',
-                    'blendAlpha',
-                    'sigmaThreshold',
-                    'tournamentGenerations',
-                    'tournamentSizeStart',
-                    'tournamentSizeEnd']
-else:
-    parameters_values = itertools.product([use_shocking_for_tournament],
-                                  [use_shocking_for_mutation],
-                                  #shock_intervals,
-                                  population_sizes,
-                                  blend_alpha,
-                                  sigma_thresholds,
-                                  generations_in_which_tournament_size_becomes_max,
-                                  tournament_size_starts_ends)
-    parameter_names = [
-                    'useShockingForTournament',
-                    'useShockingForMutation',
-                    #'shockInterval',
-                    'populationSize',
-                    'blendAlpha',
-                    'sigmaThreshold',
-                    'tournamentGenerations',
-                    'tournamentSizeStart',
-                    'tournamentSizeEnd']
+    testable_parameter_collection.append(shock_intervals)
+    parameter_names.append('shockInterval')
 
+
+
+testable_parameter_collection.append(tournament_size_starts_ends)
+parameter_names.extend(['tournamentSizeStart',
+                        'tournamentSizeEnd'])
+
+parameters_values = itertools.product(
+                            *testable_parameter_collection
+                            )
+
+# %%
 
 parameters_values = [rest + [t_s_e[0], t_s_e[1]] for *rest, t_s_e in parameters_values]
 
 parameter_names = [''.join(['-D', i]) for i in parameter_names]
+
+# %%
 
 parameters = []
 
@@ -126,6 +130,8 @@ commands = [['java'] +
             for parameter in parameters]
 
 #commands = ['java -Ddummy=123 -Ddummy2=456 -Djava.library.path=. -jar testrun.jar -submission=player58 -evaluation=SchaffersEvaluation -seed=1'] # TODO
+
+# %%
 
 individual_run_count = 8
 
@@ -146,39 +152,36 @@ for command in commands:
 
 import pickle
 
-with open('bentcigar.p', 'wb') as f:
+with open(selected_evaluation_function + '.p', 'wb') as f:
     pickle.dump(results, f)
 
 
-results
+def dont_run_this():
+    results
 
-' '.join(commands[2])
+    ' '.join(commands[2])
 
-hyhydriresults[0][1]['data']
+    results[0][1]['data']
 
-results[0][0]
-command = results[0][0]
-result = subprocess.run(command.split(), stdout=subprocess.PIPE, cwd='out/production/assignment/')
-result = ' '.join(command), parse_result(result.stdout.decode("utf-8"))
+    results[0][0]
+    command = results[0][0]
+    result = subprocess.run(command.split(), stdout=subprocess.PIPE, cwd='out/production/assignment/')
+    result = ' '.join(command), parse_result(result.stdout.decode("utf-8"))
 
-result.stdout
+    result.stdout
 
-import pandas as pd
-from io import StringIO
+    import pandas as pd
+    from io import StringIO
 
-a = pd.read_csv(StringIO(results[0][1]['data']))
+    a = pd.read_csv(StringIO(results[0][1]['data']))
 
+    a.plot()
 
+    dataframes = [pd.read_csv(StringIO(result[1]['data'])) for result in results]
 
-a.plot()
+    merged = pd.concat(dataframes, keys=range(len(dataframes)), axis=1)
 
-
-dataframes = [pd.read_csv(StringIO(result[1]['data'])) for result in results]
-
-merged = pd.concat(dataframes, keys=range(len(dataframes)), axis=1)
-
-plot = merged.plot()
-fig = plot.get_figure()
-fig.savefig('10.png')
-
-# Find best score:
+    plot = merged.plot()
+    fig = plot.get_figure()
+    fig.savefig('10.png')
+    # Find best score:
