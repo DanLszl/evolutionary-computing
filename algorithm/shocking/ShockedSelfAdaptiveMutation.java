@@ -26,7 +26,7 @@ public class ShockedSelfAdaptiveMutation extends SelfAdaptiveMutation {
             // Just replace all the sigmas with something random
             for (Individual i : population.getIndividuals()) {
                 for (int j = 0; j < 10; j++) {
-                    i.setSigma(j, rand.nextGaussian());
+                    i.setSigma(j, Math.abs(rand.nextGaussian()));
                 }
 
             }

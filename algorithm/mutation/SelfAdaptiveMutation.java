@@ -31,10 +31,12 @@ public class SelfAdaptiveMutation extends Mutation {
             for (int j = 0; j < i.genotypeLength(); j++) {
                 double pCoodinate = rand.nextGaussian();
 
+                //calculate new sigma for jth pos
                 double deltaSigma = Math.exp(overallTau*pOverall + coordinateTau*pCoodinate);
                 double newSigma = checkSigma(i.getSigma(j) * deltaSigma);
                 i.setSigma(j, newSigma);
 
+                //calculate new allele for jth pos
                 double deltaValue = rand.nextGaussian()*newSigma;
                 double newValue = checkBoundaries(i.getAllele(j) + deltaValue);
                 i.setAllele(j, newValue);

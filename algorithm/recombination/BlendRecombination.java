@@ -24,7 +24,7 @@ public class BlendRecombination implements Recombination {
         Random rand = new Random();
 
         // This for loop is misleading. It actually creates two new children
-        for(int offspringSize = 0; offspringSize < parents.size()/2; offspringSize++) {
+        for(int offspringSize = 0; offspringSize < parents.size(); offspringSize++) {
 
             // Selects first parent
             int selectedIndex = rand.nextInt(parents.size());
@@ -35,11 +35,10 @@ public class BlendRecombination implements Recombination {
             Individual parentB = parents.getIndividuals().get(selectedIndex);
 
             Individual childA = new Individual();
-            Individual childB = new Individual();
+//            Individual childB = new Individual();
 
             int genomeLength = parentA.genotypeLength();
 
-            double p_combine_simga = rand.nextDouble();
 
             for(int i=0; i<genomeLength; i++){
 
@@ -48,23 +47,22 @@ public class BlendRecombination implements Recombination {
                 double topAllele = Math.max(parentA.getAllele(i), parentB.getAllele(i)) + blendAlpha*parentDifference;
 
                 childA.setAllele(i, rand.nextDouble()*(topAllele-bottomAllele) + bottomAllele);
-                childB.setAllele(i, rand.nextDouble()*(topAllele-bottomAllele) + bottomAllele);
+//                childB.setAllele(i, rand.nextDouble()*(topAllele-bottomAllele) + bottomAllele);
 
-                if (p_combine_simga <0.5) {
-                    childA.setSigma(i,parentA.getSigma(i));
-                    childB.setSigma(i,parentB.getSigma(i));
-                } else {
+                double p = rand.nextDouble();
+                if (p < 0.5) {
+                    childA.setSigma(i, parentA.getSigma(i));
+                } else{
                     childA.setSigma(i,parentB.getSigma(i));
-                    childB.setSigma(i,parentA.getSigma(i));
                 }
 
-                //if (Math.abs(childB.getSigma(i)) > 1000) {
-                //    System.out.println(childB.getSigma(i));
-                //}
+                if (Math.abs(childA.getSigma(i)) > 1) {
+                    System.out.println(childA.getSigma(i));
+                }
             }
 
             offspring.add(childA);
-            offspring.add(childB);
+//            offspring.add(childB);
         }
 
         return offspring;
