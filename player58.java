@@ -7,6 +7,7 @@ import algorithm.mutation.SelfAdaptiveMutation;
 import algorithm.mutation.UniformMutation;
 
 import algorithm.parentselection.*;
+import algorithm.recombination.DiscreteRecombination;
 import algorithm.shocking.ShockedAdaptiveTournamentParentSelection;
 import algorithm.shocking.ShockedSelfAdaptiveMutation;
 import algorithm.survivalselection.ReplaceAllSurvivalSelection;
@@ -61,7 +62,11 @@ public class player58 implements ContestSubmission
         boolean isSeparable = Boolean.parseBoolean(props.getProperty("Separable"));
 
 		// Do sth with property values, e.g. specify relevant settings of your algorithm
+		//System.out.println(isMultimodal);
+		//System.out.println(hasStructure);
+		//System.out.println(isSeparable);
         if(isMultimodal){
+			System.out.println();
             // Do sth
         }else{
             // Do sth else
@@ -113,6 +118,7 @@ public class player58 implements ContestSubmission
                     shockInterval
             );
         } else {
+            //System.out.println("No shocking");
             parentSelection = new AdaptiveTournamentParentSelection(
                     tournamentSizeStart,
                     tournamentSizeEnd,
@@ -127,6 +133,7 @@ public class player58 implements ContestSubmission
         SelfAdaptiveMutation mutation = null;
         flag = Parameters.getuseShockingForMutation();
         if (flag == null || flag == true) {
+
             mutation = new ShockedSelfAdaptiveMutation(
                     threshold,
                     hardness,
@@ -135,10 +142,12 @@ public class player58 implements ContestSubmission
                     shockInterval
             );
         } else {
+            //System.out.println("No shocking");
             mutation = new SelfAdaptiveMutation(threshold,hardness,lowerBoundary,upperBoundary);
         }
 
 		Recombination recombination = new BlendRecombination(blendAlpha);
+        //Recombination recombination = new DiscreteRecombination();
 		SurvivorSelection survivorSelection = new ReplaceAllSurvivalSelection();
 		TerminationCriteria terminationCriteria = new NoTerminationCriteria();
 
