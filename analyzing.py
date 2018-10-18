@@ -90,7 +90,7 @@ score_avgs[sorted_ind[-1]]
 score_avgs[ind][0]
 
 
-
+commands[2]
 
 
 score_avgs[ind]

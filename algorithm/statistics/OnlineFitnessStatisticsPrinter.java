@@ -33,7 +33,11 @@ public class OnlineFitnessStatisticsPrinter {
                 sum += d;
             }
 
+
             Double best = fitnessValues.get(fitnessValues.size() - 1);
+            if (best.isNaN()) {
+                System.out.println("FUCK!!!!");
+            }
             Double worst = fitnessValues.get(0);
             Double avg = sum / fitnessValues.size();
             Double median = fitnessValues.get(fitnessValues.size() / 2);
