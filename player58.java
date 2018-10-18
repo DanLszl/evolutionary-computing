@@ -66,7 +66,7 @@ public class player58 implements ContestSubmission
 		//System.out.println(hasStructure);
 		//System.out.println(isSeparable);
         if(isMultimodal){
-			System.out.println();
+			//System.out.println();
             // Do sth
         }else{
             // Do sth else
