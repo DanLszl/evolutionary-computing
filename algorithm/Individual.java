@@ -4,7 +4,7 @@ import org.vu.contest.ContestEvaluation;
 
 import java.util.Random;
 
-public class Individual {
+public class Individual implements Comparable<Individual> {
     private double[] genotype = new double[10];
     private double[] stepsize = new double[10];
     private Double fitness = null;
@@ -15,7 +15,7 @@ public class Individual {
             double r = rand.nextDouble();
             genotype[i] = (r * 10) - 5;
 
-            stepsize[i] = rand.nextGaussian();;
+            stepsize[i] = 1.0;
         }
     }
 
@@ -59,5 +59,13 @@ public class Individual {
         } else {
             throw new NullPointerException("The Individual was not evaluated (fitness is not known)");
         }
+    }
+
+    @Override
+    public int compareTo(Individual compareIndividual) {
+        double compareQuantity = ((Individual) compareIndividual).getFitness();
+
+        //ascending order
+        return(this.fitness < compareQuantity ? -1 : (this.fitness == compareQuantity ? 0 : 1));
     }
 }

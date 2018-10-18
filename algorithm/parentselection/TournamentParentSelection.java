@@ -3,6 +3,8 @@ package algorithm.parentselection;
 import algorithm.Individual;
 import algorithm.Population;
 
+import java.util.stream.Collectors;
+
 
 public class TournamentParentSelection implements ParentSelection {
 
@@ -62,6 +64,6 @@ public class TournamentParentSelection implements ParentSelection {
 
         }
 
-        return population;
+        return new Population(population.getIndividuals().stream().distinct().collect(Collectors.toList()));
     }
 }

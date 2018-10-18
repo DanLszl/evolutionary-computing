@@ -8,7 +8,7 @@ import java.util.List;
 public class Population {
     private List<Individual> individuals = new ArrayList<>();
 
-    private Population(List<Individual> individuals) {
+    public Population(List<Individual> individuals) {
         this.individuals = individuals;
     }
 
@@ -57,6 +57,7 @@ public class Population {
     public List<Individual> getIndividuals() {
         return individuals;
     }
+    public Individual getIndividual(int i) { return individuals.get(i); }
 
     public void add(Individual individual) {
         individuals.add(individual);
