@@ -110,6 +110,7 @@ parameters_values = [rest + [t_s_e[0], t_s_e[1]] for *rest, t_s_e in parameters_
 parameter_names = [''.join(['-D', i]) for i in parameter_names]
 
 parameters = []
+<<<<<<< HEAD
 
 for parameters_value in parameters_values:
     parameter = [''.join([i, '=', str(j)]) for i, j in zip(parameter_names, parameters_value)]
@@ -146,6 +147,71 @@ a = pd.read_csv(StringIO(results[0][1]['data']))
 
 
 
+=======
+
+for parameters_value in parameters_values:
+    parameter = [''.join([i, '=', str(j)]) for i, j in zip(parameter_names, parameters_value)]
+    parameters.append(parameter)
+
+
+commands = [['java'] +
+            parameter +
+            ['-Djava.library.path=.',
+             '-jar', 'testrun.jar',
+             '-submission=player58',
+             '-evaluation=' + selected_evaluation_function,
+             '-seed=1']
+            for parameter in parameters]
+
+#commands = ['java -Ddummy=123 -Ddummy2=456 -Djava.library.path=. -jar testrun.jar -submission=player58 -evaluation=SchaffersEvaluation -seed=1'] # TODO
+
+individual_run_count = 8
+
+results = []
+i = 0
+for command in commands:
+    print(str(i) + '/' + str(len(commands)))
+    i += 1
+
+    individual_results = []
+    for j in range(individual_run_count):
+        print('\t' + str(j))
+        result = subprocess.run(command, stdout=subprocess.PIPE, cwd='out/production/assignment/')
+        result = ' '.join(command), parse_result(result.stdout.decode("utf-8"))
+        individual_results.append(result)
+
+    results.append(individual_results)
+
+import pickle
+
+with open('bentcigar.p', 'wb') as f:
+    pickle.dump(results, f)
+
+
+results
+
+' '.join(commands[2])
+
+hyhydriresults[0][1]['data']
+
+results[0][0]
+command = results[0][0]
+result = subprocess.run(command.split(), stdout=subprocess.PIPE, cwd='out/production/assignment/')
+result = ' '.join(command), parse_result(result.stdout.decode("utf-8"))
+
+result.stdout
+
+import pandas as pd
+from io import StringIO
+
+a = pd.read_csv(StringIO(results[0][1]['data']))
+
+
+
+a.plot()
+
+
+>>>>>>> master
 dataframes = [pd.read_csv(StringIO(result[1]['data'])) for result in results]
 
 merged = pd.concat(dataframes, keys=range(len(dataframes)), axis=1)

@@ -15,7 +15,8 @@ public class Individual implements Comparable<Individual> {
             double r = rand.nextDouble();
             genotype[i] = (r * 10) - 5;
 
-            stepsize[i] = 1.0;
+            stepsize[i] = rand.nextGaussian();
+
         }
     }
 

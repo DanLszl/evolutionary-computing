@@ -40,23 +40,18 @@ public class BlendRecombination implements Recombination {
             int genomeLength = parentA.genotypeLength();
 
 
-            for(int i=0; i<genomeLength; i++){
+            for(int i=0; i<genomeLength; i++) {
 
-                double parentDifference = Math.abs(parentA.getAllele(i)-parentB.getAllele(i));
-                double bottomAllele = Math.min(parentA.getAllele(i), parentB.getAllele(i)) - blendAlpha*parentDifference;
-                double topAllele = Math.max(parentA.getAllele(i), parentB.getAllele(i)) + blendAlpha*parentDifference;
+                double parentDifference = Math.abs(parentA.getAllele(i) - parentB.getAllele(i));
+                double bottomAllele = Math.min(parentA.getAllele(i), parentB.getAllele(i)) - blendAlpha * parentDifference;
+                double topAllele = Math.max(parentA.getAllele(i), parentB.getAllele(i)) + blendAlpha * parentDifference;
 
-                childA.setAllele(i, rand.nextDouble()*(topAllele-bottomAllele) + bottomAllele);
+                childA.setAllele(i, rand.nextDouble() * (topAllele - bottomAllele) + bottomAllele);
 //                childB.setAllele(i, rand.nextDouble()*(topAllele-bottomAllele) + bottomAllele);
 
-                childA.setSigma(i,(parentA.getSigma(i)+parentB.getSigma(i))/2);
+                childA.setSigma(i, (parentA.getSigma(i) + parentB.getSigma(i)) / 2);
 
-
-                if (Math.abs(childA.getSigma(i)) > 1000) {
-                    System.out.println(childA.getSigma(i));
-                }
             }
-
             offspring.add(childA);
 //            offspring.add(childB);
         }

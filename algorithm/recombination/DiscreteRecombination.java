@@ -11,7 +11,7 @@ public class DiscreteRecombination implements Recombination {
         Population offspring = new Population();
 
         Random rand = new Random();
-        for(int offspringSize = 0; offspringSize < parents.size()*7 ; offspringSize++) {
+        for(int offspringSize = 0; offspringSize < 100 ; offspringSize++) {
             int selectedIndex = rand.nextInt(parents.size());
             Individual parentA = parents.getIndividuals().get(selectedIndex);
 
