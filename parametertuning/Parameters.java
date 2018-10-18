@@ -10,11 +10,11 @@ public class Parameters {
 
     public static Boolean getuseShockingForTournament() {
         String raw = System.getProperty("useShockingForTournament");
-        return raw == null ? null : Boolean.parseBoolean(raw);
+        return Boolean.parseBoolean(raw);
     }
     public static Boolean getuseShockingForMutation() {
         String raw = System.getProperty("useShockingForMutation");
-        return raw == null ? null : Boolean.parseBoolean(raw) ;
+        return Boolean.parseBoolean(raw) ;
     }
 
     public static Integer getshockInterval() {

@@ -84,7 +84,7 @@ public class player58 implements ContestSubmission
         boolean printStatistics = true;
 		OnlineFitnessStatisticsPrinter onlineFitnessStatisticsPrinter = new OnlineFitnessStatisticsPrinter(printStatistics);	// TODO refactor to csv
 
-		int populationSize = Parameters.getpopulationSize() == null ? 100 : Parameters.getpopulationSize();
+		int populationSize = Parameters.getpopulationSize() == null ? 200 : Parameters.getpopulationSize();
 		double blendAlpha = Parameters.getblendAlpha() == null ? 0.3 : Parameters.getblendAlpha();
 
 		//mutation parameters
@@ -111,7 +111,7 @@ public class player58 implements ContestSubmission
 		ParentSelection parentSelection = null;
 
 		Boolean flag = Parameters.getuseShockingForTournament();
-        if (flag == null || flag == true) {
+        if (flag == true) {
             parentSelection = new ShockedAdaptiveTournamentParentSelection(
                     tournamentSizeStart,
                     tournamentSizeEnd,
@@ -127,12 +127,9 @@ public class player58 implements ContestSubmission
         }
 
 
-
-		// UniformMutation mutation = new UniformMutation(probabilityOfMutation,lowerBoundary,upperBoundary);
-		// NonUniformMutation mutation = new NonUniformMutation(sigma,lowerBoundary,upperBoundary);
         SelfAdaptiveMutation mutation = null;
         flag = Parameters.getuseShockingForMutation();
-        if (flag == null || flag == true) {
+        if (flag == true) {
 
             mutation = new ShockedSelfAdaptiveMutation(
                     threshold,
@@ -146,8 +143,8 @@ public class player58 implements ContestSubmission
             mutation = new SelfAdaptiveMutation(threshold,hardness,lowerBoundary,upperBoundary);
         }
 
-		Recombination recombination = new BlendRecombination(blendAlpha);
-        //Recombination recombination = new DiscreteRecombination();
+        Recombination recombination = new DiscreteRecombination();
+//		Recombination recombination = new BlendRecombination(blendAlpha);
 		SurvivorSelection survivorSelection = new ReplaceAllSurvivalSelection();
 		TerminationCriteria terminationCriteria = new NoTerminationCriteria();
 
