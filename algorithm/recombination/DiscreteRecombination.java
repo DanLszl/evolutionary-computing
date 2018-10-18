@@ -32,7 +32,7 @@ public class DiscreteRecombination implements Recombination {
                     childA.setSigma(i, parentB.getSigma(i));
                 }
                 if (Math.abs(childA.getSigma(i)) > 1) {
-                    System.out.println(childA.getSigma(i));
+                    //System.out.println(childA.getSigma(i));
                 }
             }
 

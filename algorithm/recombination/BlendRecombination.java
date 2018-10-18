@@ -57,7 +57,7 @@ public class BlendRecombination implements Recombination {
                 }
 
                 if (Math.abs(childA.getSigma(i)) > 1) {
-                    System.out.println(childA.getSigma(i));
+                    //System.out.println(childA.getSigma(i));
                 }
             }
 
