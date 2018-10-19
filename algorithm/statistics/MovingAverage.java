@@ -24,7 +24,7 @@ public class MovingAverage {
     }
 
     public double get() {
-        return rollingSum / values.size();
+        return values.size() > 0 ? rollingSum / values.size() : 0;
     }
 
 }

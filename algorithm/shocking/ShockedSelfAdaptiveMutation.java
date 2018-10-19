@@ -9,6 +9,8 @@ import java.util.Random;
 
 public class ShockedSelfAdaptiveMutation extends SelfAdaptiveMutation {
 
+
+
     private int currentGeneration = 0;
     private int shockInterval;
 
@@ -26,7 +28,7 @@ public class ShockedSelfAdaptiveMutation extends SelfAdaptiveMutation {
             // Just replace all the sigmas with something random
             for (Individual i : population.getIndividuals()) {
                 for (int j = 0; j < 10; j++) {
-                    i.setSigma(j, Math.abs(rand.nextGaussian()));
+                    i.setSigma(j, 1.0);
                 }
 
             }

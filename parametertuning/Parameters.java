@@ -8,13 +8,21 @@ package parametertuning;
  * */
 public class Parameters {
 
+    public static Integer getpatience() {
+        try {
+            return Integer.parseInt(System.getProperty("shockPatience"));
+        } catch (NumberFormatException | NullPointerException e) {
+            return null;
+        }
+    }
+
     public static Boolean getuseShockingForTournament() {
         String raw = System.getProperty("useShockingForTournament");
-        return Boolean.parseBoolean(raw);
+        return raw == null ? null : Boolean.parseBoolean(raw);
     }
     public static Boolean getuseShockingForMutation() {
         String raw = System.getProperty("useShockingForMutation");
-        return Boolean.parseBoolean(raw) ;
+        return raw == null ? null : Boolean.parseBoolean(raw);
     }
 
     public static Integer getshockInterval() {
