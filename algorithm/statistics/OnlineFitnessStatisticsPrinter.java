@@ -19,8 +19,8 @@ public class OnlineFitnessStatisticsPrinter {
 
     private int movingWindowSize;
 
-    MovingAverage movingSPD = new MovingAverage(movingWindowSize);
-    MovingAverage movingFitnessStdDev = new MovingAverage(movingWindowSize);
+    MovingAverage movingSPD;
+    MovingAverage movingFitnessStdDev;
 
     Double prevMovingAvgSPD = 0.0;
     Double currentMovingAvgSPD = 0.0;
@@ -31,6 +31,9 @@ public class OnlineFitnessStatisticsPrinter {
     public OnlineFitnessStatisticsPrinter(boolean printAll, int movingWindowSize) {
         this.printAll = printAll;
         this.movingWindowSize = movingWindowSize;
+        movingSPD = new MovingAverage(movingWindowSize);
+        movingFitnessStdDev = new MovingAverage(movingWindowSize);
+
         if (printAll) {
             System.out.println("best, worst, avg, spd, fitness_std_dev, median");
         }
@@ -40,53 +43,60 @@ public class OnlineFitnessStatisticsPrinter {
         return currentMovingFitnessStdDev - prevMovingFitnessStdDev;
     }
 
-    public Double getPrevMovingAvgSPD() {
-        return currentMovingAvgSPD - currentMovingAvgSPD;
+    public Double getSPDDelta() {
+        return currentMovingAvgSPD - prevMovingAvgSPD;
     }
 
-    public void printStats(Population generation) {
+    public void printStats(double best, double worst, double avg, double spd, double fitnessStdDev, double median) {
+
+        System.out.print(best); System.out.print(", ");
+        System.out.print(worst); System.out.print(", ");
+        System.out.print(avg); System.out.print(", ");
+
+        System.out.print(spd); System.out.print(", ");
+        System.out.print(fitnessStdDev); System.out.print(", ");
+
+        System.out.println(median);
+
+    }
+
+    public void collectStats(Population generation) {
+        List<Double> fitnessValues = generation.getFitnessValues();
+
+        Collections.sort(fitnessValues);
+
+        double sum = 0;
+
+        for (Double d : fitnessValues) {
+            sum += d;
+        }
+
+        Double best = fitnessValues.get(fitnessValues.size() - 1);
+        Double worst = fitnessValues.get(0);
+        Double avg = sum / fitnessValues.size();
+        Double median = fitnessValues.get(fitnessValues.size() / 2);
+
+        Double spd = PopulationDiversity.SPD(generation);
+        Double fitnessStdDev = PopulationDiversity.std_dev(fitnessValues);
+
+        prevMovingAvgSPD = currentMovingAvgSPD;
+        movingSPD.add(spd);
+        currentMovingAvgSPD = movingSPD.get();
+
+        prevMovingFitnessStdDev = currentMovingFitnessStdDev;
+        movingFitnessStdDev.add(fitnessStdDev);
+        currentMovingFitnessStdDev = movingFitnessStdDev.get();
+
+
+        worstHistory.add(worst);
+        bestHistory.add(best);
+        avgHistory.add(avg);
+        medianHistory.add(median);
+        spdHistory.add(spd);
+        fitnessStdDevHistory.add(fitnessStdDev);
+
         if (printAll) {
-            List<Double> fitnessValues = generation.getFitnessValues();
-
-            Collections.sort(fitnessValues);
-
-            double sum = 0;
-
-            for (Double d : fitnessValues) {
-                sum += d;
-            }
-
-            Double best = fitnessValues.get(fitnessValues.size() - 1);
-            Double worst = fitnessValues.get(0);
-            Double avg = sum / fitnessValues.size();
-            Double median = fitnessValues.get(fitnessValues.size() / 2);
-
-            Double spd = PopulationDiversity.SPD(generation);
-            Double fitnessStdDev = PopulationDiversity.std_dev(fitnessValues);
-
-            prevMovingAvgSPD = currentMovingAvgSPD;
-            movingSPD.add(spd);
-            currentMovingAvgSPD = movingSPD.get();
-
-            prevMovingFitnessStdDev = currentMovingFitnessStdDev;
-            movingFitnessStdDev.add(fitnessStdDev);
-            currentMovingFitnessStdDev = movingFitnessStdDev.get();
-
-            System.out.print(best); System.out.print(", ");
-            System.out.print(worst); System.out.print(", ");
-            System.out.print(avg); System.out.print(", ");
-
-            System.out.print(spd); System.out.print(", ");
-            System.out.print(fitnessStdDev); System.out.print(", ");
-
-            System.out.println(median);
-
-            worstHistory.add(worst);
-            bestHistory.add(best);
-            avgHistory.add(avg);
-            medianHistory.add(median);
-            spdHistory.add(spd);
-            fitnessStdDevHistory.add(fitnessStdDev);
+            printStats(best, worst, avg, spd, fitnessStdDev, median);
         }
     }
 }

@@ -9,8 +9,7 @@ import algorithm.mutation.UniformMutation;
 
 import algorithm.parentselection.*;
 import algorithm.recombination.DiscreteRecombination;
-import algorithm.shocking.ShockedAdaptiveTournamentParentSelection;
-import algorithm.shocking.ShockedSelfAdaptiveMutation;
+import algorithm.shocking.*;
 import algorithm.survivalselection.ReplaceAllSurvivalSelection;
 import algorithm.survivalselection.SurvivorSelection;
 import org.vu.contest.ContestSubmission;
@@ -84,13 +83,13 @@ public class player58 implements ContestSubmission
 
 
 
-		int populationSize = Parameters.getpopulationSize() == null ? 200 : Parameters.getpopulationSize();
+		int populationSize = Parameters.getpopulationSize() == null ? 100 : Parameters.getpopulationSize();
 
 		int generationCount = evaluations_limit_ / populationSize;
 		int movingWindowSize = (int) (generationCount * 0.05);
         movingWindowSize = movingWindowSize < 5 ? 5 : movingWindowSize;
 
-        boolean printStatistics = false;
+        boolean printStatistics = true;
         OnlineFitnessStatisticsPrinter onlineFitnessStatisticsPrinter = new OnlineFitnessStatisticsPrinter(printStatistics, movingWindowSize);
 
 		double blendAlpha = Parameters.getblendAlpha() == null ? 0.3 : Parameters.getblendAlpha();
@@ -105,10 +104,10 @@ public class player58 implements ContestSubmission
 
 
         // Linear tournament size parameters
-        int tournamentSizeStart = Parameters.gettournamentSizeStart() == null ? 5 : Parameters.gettournamentSizeStart();
-        int tournamentSizeEnd = Parameters.gettournamentSizeEnd() == null ? 25 : Parameters.gettournamentSizeEnd();
-        int tournamentSizeGenerations = Parameters.gettournamentGenerations() == null ? 200 : Parameters.gettournamentGenerations();
-        int shockInterval = Parameters.getshockInterval() == null ? 40 : Parameters.getshockInterval();
+        int tournamentSizeStart = Parameters.gettournamentSizeStart() == null ? 2 : Parameters.gettournamentSizeStart();
+        int tournamentSizeEnd = Parameters.gettournamentSizeEnd() == null ? 20 : Parameters.gettournamentSizeEnd();
+        int tournamentSizeGenerations = Parameters.gettournamentGenerations() == null ? 500 : Parameters.gettournamentGenerations();
+        int shockInterval = Parameters.getshockInterval() == null ? 1000 : Parameters.getshockInterval();
 
 
 
@@ -118,13 +117,38 @@ public class player58 implements ContestSubmission
 
 		ParentSelection parentSelection = null;
 
-		Boolean flag = Parameters.getuseShockingForTournament();
+
+
+        double plateauThreshold = 0.001;
+
+        Integer patience = Parameters.getpatience();
+        patience = patience == null ? 750 : patience;
+
+        // Katsuura
+//        int patience = 750;
+//        patience = 75;
+        // Schaffers
+//        patience = 50;
+        // Bentcigar
+//        patience = 1;
+
+        ShockChecker shockChecker = new ShockChecker(onlineFitnessStatisticsPrinter, plateauThreshold, patience);
+
+		Boolean flag = Parameters.getuseShockingForTournament() == null ? true : false;
         if (flag == true) {
-            parentSelection = new ShockedAdaptiveTournamentParentSelection(
+
+//            System.out.println("HERE!!!");
+            parentSelection = new DiversityBasedShockedTournamentSelection(
                     tournamentSizeStart,
                     tournamentSizeEnd,
-                    shockInterval
-            );
+                    tournamentSizeGenerations,
+                    shockChecker);
+
+//            parentSelection = new ShockedAdaptiveTournamentParentSelection(
+//                    tournamentSizeStart,
+//                    tournamentSizeEnd,
+//                    shockInterval
+//            );
         } else {
             //System.out.println("No shocking");
             parentSelection = new AdaptiveTournamentParentSelection(
@@ -136,16 +160,16 @@ public class player58 implements ContestSubmission
 
 
         SelfAdaptiveMutation mutation = null;
-        flag = Parameters.getuseShockingForMutation();
+        flag = Parameters.getuseShockingForMutation() == null ? true : true;
         if (flag == true) {
 
-            mutation = new ShockedSelfAdaptiveMutation(
+            mutation = new DiversityBasedShockedSelfAdaptiveMutation(
                     threshold,
                     hardness,
                     lowerBoundary,
                     upperBoundary,
-                    shockInterval
-            );
+                    shockChecker);
+//            mutation = new ShockedSelfAdaptiveMutation(threshold, hardness, lowerBoundary, upperBoundary, shockInterval);
         } else {
             //System.out.println("No shocking");
             mutation = new SelfAdaptiveMutation(threshold,hardness,lowerBoundary,upperBoundary);
@@ -171,11 +195,16 @@ public class player58 implements ContestSubmission
         while(evals < evaluations_limit_){
             // System.out.println(generation++);
             //"std dev: " +
-            //System.out.print(Double.toString(PopulationDiversity.fitnessBasedDiversity(previousGeneration)));
-            System.out.print(Double.toString(PopulationDiversity.SPD(previousGeneration)));
-            System.out.print(',');
+//            System.out.print(PopulationDiversity.fitnessBasedDiversity(previousGeneration));
+//            System.out.print(Double.toString(PopulationDiversity.SPD(previousGeneration)));
+//            System.out.print(',');
+//            System.out.print(onlineFitnessStatisticsPrinter.getFitnessStdDevDelta());
+//            System.out.print(onlineFitnessStatisticsPrinter.getSPDDelta());
+//            System.out.println(',');
 
-			onlineFitnessStatisticsPrinter.printStats(previousGeneration);
+//            System.out.println(generation++);
+//
+            onlineFitnessStatisticsPrinter.collectStats(previousGeneration);
 
 			// Select parents
 			Population parents = parentSelection.selectParents(previousGeneration);
