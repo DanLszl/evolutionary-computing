@@ -89,7 +89,7 @@ public class player58 implements ContestSubmission
 		int movingWindowSize = (int) (generationCount * 0.05);
         movingWindowSize = movingWindowSize < 5 ? 5 : movingWindowSize;
 
-        boolean printStatistics = false;
+        boolean printStatistics = true;
         OnlineFitnessStatisticsPrinter onlineFitnessStatisticsPrinter = new OnlineFitnessStatisticsPrinter(printStatistics, movingWindowSize);
 
 		double blendAlpha = Parameters.getblendAlpha() == null ? 0.3 : Parameters.getblendAlpha();

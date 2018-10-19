@@ -23,7 +23,7 @@ public class DiversityBasedShockedTournamentSelection extends AdaptiveTournament
     protected void updateTournamentSize() {
         if (shockChecker.checkShock()) {
             // We are on a plateau, so introduce a shock
-            System.out.println("Reset was called");
+//            System.out.println("Reset was called");
             reset();
         } else {
             super.updateTournamentSize();
