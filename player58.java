@@ -1,3 +1,4 @@
+import algorithm.diversity.PopulationDiversity;
 import algorithm.initialization.Initialization;
 import algorithm.Population;
 import algorithm.initialization.RandomInitialization;
@@ -81,10 +82,17 @@ public class player58 implements ContestSubmission
 
 		System.out.println("Evaluations limit: " + Integer.toString(evaluations_limit_));
 
-        boolean printStatistics = true;
-		OnlineFitnessStatisticsPrinter onlineFitnessStatisticsPrinter = new OnlineFitnessStatisticsPrinter(printStatistics);	// TODO refactor to csv
+
 
 		int populationSize = Parameters.getpopulationSize() == null ? 200 : Parameters.getpopulationSize();
+
+		int generationCount = evaluations_limit_ / populationSize;
+		int movingWindowSize = (int) (generationCount * 0.05);
+        movingWindowSize = movingWindowSize < 5 ? 5 : movingWindowSize;
+
+        boolean printStatistics = false;
+        OnlineFitnessStatisticsPrinter onlineFitnessStatisticsPrinter = new OnlineFitnessStatisticsPrinter(printStatistics, movingWindowSize);
+
 		double blendAlpha = Parameters.getblendAlpha() == null ? 0.3 : Parameters.getblendAlpha();
 
 		//mutation parameters
@@ -162,6 +170,10 @@ public class player58 implements ContestSubmission
         int generation = 0;
         while(evals < evaluations_limit_){
             // System.out.println(generation++);
+            //"std dev: " +
+            //System.out.print(Double.toString(PopulationDiversity.fitnessBasedDiversity(previousGeneration)));
+            System.out.print(Double.toString(PopulationDiversity.SPD(previousGeneration)));
+            System.out.print(',');
 
 			onlineFitnessStatisticsPrinter.printStats(previousGeneration);
 

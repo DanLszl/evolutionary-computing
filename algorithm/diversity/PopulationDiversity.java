@@ -3,6 +3,8 @@ package algorithm.diversity;
 import algorithm.Individual;
 import algorithm.Population;
 
+import java.util.List;
+
 public class PopulationDiversity {
 
     public static double euclidean(Individual a, Individual b) {
@@ -49,5 +51,26 @@ public class PopulationDiversity {
         }
 
         return sum;
+    }
+
+    public static double std_dev(List<Double> numbers) {
+        double sum = 0.0;
+        double std = 0.0;
+
+        for(Double number : numbers) {
+            sum += number;
+        }
+
+        double mean = sum/numbers.size();
+
+        for(Double number: numbers) {
+            std += Math.pow(number - mean, 2);
+        }
+
+        return Math.sqrt(std/numbers.size());
+    }
+
+    public static double fitnessBasedDiversity(Population population) {
+        return std_dev(population.getFitnessValues());
     }
 }
