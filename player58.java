@@ -118,11 +118,11 @@ public class player58 implements ContestSubmission
 		System.out.println(hasStructure);
 		System.out.println(isSeparable);
 
-		if (isMultimodal && hasStructure && isSeparable) {
+		if (!isMultimodal && !hasStructure && !isSeparable) {
             setBentCigarParameters();
-		} else if (isMultimodal && hasStructure && isSeparable) {
+		} else if (isMultimodal && hasStructure && !isSeparable) {
 			setSchaffersParameters();
-		} else if (isMultimodal && hasStructure && isSeparable) {
+		} else if (isMultimodal && !hasStructure && !isSeparable) {
             setKatsuuraParameters();
 		} else {
             System.out.println("Shouldnt arrive here");
