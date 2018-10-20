@@ -12,6 +12,7 @@ import algorithm.recombination.DiscreteRecombination;
 import algorithm.shocking.*;
 import algorithm.survivalselection.ReplaceAllSurvivalSelection;
 import algorithm.survivalselection.SurvivorSelection;
+
 import org.vu.contest.ContestSubmission;
 import org.vu.contest.ContestEvaluation;
 import algorithm.recombination.BlendRecombination;
@@ -30,6 +31,57 @@ public class player58 implements ContestSubmission
 	Random rnd_;
 	ContestEvaluation evaluation_;
     private int evaluations_limit_;
+
+
+
+    // Parameters
+	boolean useShockingForTournament;
+	boolean useShockingForMutation;
+	int populationSize;
+	double sigmaThreshold;
+	int tournamentGenerations;
+	int tournamentSizeStart;
+	int tournamentSizeEnd;
+	int patience;
+
+
+	public void setSchaffersParameters() {
+		useShockingForTournament = true;
+		useShockingForMutation = true;
+		populationSize = 250;
+		sigmaThreshold = 0.01;
+		tournamentGenerations = 50;
+		tournamentSizeStart = 2;
+		tournamentSizeEnd = 20;
+		patience = 50;
+	}
+
+	public void setKatsuuraParameters() {
+		useShockingForTournament = true;
+		useShockingForMutation = true;
+		populationSize = 100;
+		sigmaThreshold = 0.001;
+		tournamentGenerations = 500;
+		tournamentSizeStart = 2;
+		tournamentSizeEnd = 20;
+		patience = 750;
+	}
+
+
+	public void setBentCigarParameters() {
+		useShockingForTournament = false;
+		useShockingForMutation = false;
+		populationSize = 200;
+		sigmaThreshold = 0.0001;
+		tournamentGenerations = 50;
+		tournamentSizeStart = 2;
+		tournamentSizeEnd = 20;
+		patience = 1;
+	}
+
+	public void setDefaultParameters() {
+
+	}
 
 	public static void main(String[] args) {
 		System.out.println("Test");
@@ -62,15 +114,17 @@ public class player58 implements ContestSubmission
         boolean isSeparable = Boolean.parseBoolean(props.getProperty("Separable"));
 
 		// Do sth with property values, e.g. specify relevant settings of your algorithm
-		//System.out.println(isMultimodal);
-		//System.out.println(hasStructure);
-		//System.out.println(isSeparable);
-        if(isMultimodal){
-			//System.out.println();
-            // Do sth
-        }else{
-            // Do sth else
-        }
+		System.out.println(isMultimodal);
+		System.out.println(hasStructure);
+		System.out.println(isSeparable);
+
+		if (isMultimodal && hasStructure && isSeparable) {
+			setKatsuuraParameters();
+		} else if (isMultimodal && hasStructure && isSeparable) {
+			setSchaffersParameters();
+		} else {
+			setBentCigarParameters();
+		}
     }
 
 
@@ -82,12 +136,15 @@ public class player58 implements ContestSubmission
 		System.out.println("Evaluations limit: " + Integer.toString(evaluations_limit_));
 
 
-
-		int populationSize = Parameters.getpopulationSize() == null ? 100 : Parameters.getpopulationSize();
+		if (Parameters.getpopulationSize() != null) {
+			populationSize = Parameters.getpopulationSize();
+		}
 
 		int generationCount = evaluations_limit_ / populationSize;
 		int movingWindowSize = (int) (generationCount * 0.05);
         movingWindowSize = movingWindowSize < 5 ? 5 : movingWindowSize;
+
+
 
         boolean printStatistics = true;
         OnlineFitnessStatisticsPrinter onlineFitnessStatisticsPrinter = new OnlineFitnessStatisticsPrinter(printStatistics, movingWindowSize);
@@ -99,14 +156,26 @@ public class player58 implements ContestSubmission
 		double sigma = 0.1;
 		double lowerBoundary = -5.0;	// THIS IS NOT A PARAMETER!
 		double upperBoundary = 5.0;		// THIS IS NOT A PARAMETER!
-		double threshold = Parameters.getsigmaThreshold() == null ? 0.001 : Parameters.getsigmaThreshold();
+
+		if (Parameters.getsigmaThreshold() != null) {
+			sigmaThreshold = Parameters.getsigmaThreshold();
+		}
 		double hardness = 10.0;		// THIS IS NOT A PARAMETER!
 
 
         // Linear tournament size parameters
-        int tournamentSizeStart = Parameters.gettournamentSizeStart() == null ? 2 : Parameters.gettournamentSizeStart();
-        int tournamentSizeEnd = Parameters.gettournamentSizeEnd() == null ? 20 : Parameters.gettournamentSizeEnd();
-        int tournamentSizeGenerations = Parameters.gettournamentGenerations() == null ? 500 : Parameters.gettournamentGenerations();
+		if (Parameters.gettournamentSizeStart() != null) {
+			tournamentSizeStart = Parameters.gettournamentSizeStart();
+		}
+
+		if (Parameters.gettournamentSizeEnd() != null) {
+			tournamentSizeEnd = Parameters.gettournamentSizeEnd();
+		}
+
+		if (Parameters.gettournamentGenerations() != null) {
+			tournamentGenerations = Parameters.gettournamentGenerations();
+		}
+
         int shockInterval = Parameters.getshockInterval() == null ? 1000 : Parameters.getshockInterval();
 
 
@@ -121,8 +190,10 @@ public class player58 implements ContestSubmission
 
         double plateauThreshold = 0.001;
 
-        Integer patience = Parameters.getpatience();
-        patience = patience == null ? 750 : patience;
+        if(Parameters.getpatience() != null) {
+			patience = Parameters.getpatience();
+		}
+
 
         // Katsuura
 //        int patience = 750;
@@ -134,14 +205,23 @@ public class player58 implements ContestSubmission
 
         ShockChecker shockChecker = new ShockChecker(onlineFitnessStatisticsPrinter, plateauThreshold, patience);
 
-		Boolean flag = Parameters.getuseShockingForTournament() == null ? true : false;
-        if (flag == true) {
+		if (Parameters.getuseShockingForTournament() != null) {
+			useShockingForTournament = Parameters.getuseShockingForTournament();
+		}
+
+		if (Parameters.getuseShockingForMutation() != null) {
+			useShockingForMutation = Parameters.getuseShockingForMutation();
+		}
+
+
+
+        if (useShockingForTournament) {
 
 //            System.out.println("HERE!!!");
             parentSelection = new DiversityBasedShockedTournamentSelection(
                     tournamentSizeStart,
                     tournamentSizeEnd,
-                    tournamentSizeGenerations,
+                    tournamentGenerations,
                     shockChecker);
 
 //            parentSelection = new ShockedAdaptiveTournamentParentSelection(
@@ -154,17 +234,17 @@ public class player58 implements ContestSubmission
             parentSelection = new AdaptiveTournamentParentSelection(
                     tournamentSizeStart,
                     tournamentSizeEnd,
-                    tournamentSizeGenerations
+                    tournamentGenerations
             );
         }
 
 
         SelfAdaptiveMutation mutation = null;
-        flag = Parameters.getuseShockingForMutation() == null ? true : true;
-        if (flag == true) {
+
+        if (useShockingForMutation) {
 
             mutation = new DiversityBasedShockedSelfAdaptiveMutation(
-                    threshold,
+                    sigmaThreshold,
                     hardness,
                     lowerBoundary,
                     upperBoundary,
@@ -172,7 +252,7 @@ public class player58 implements ContestSubmission
 //            mutation = new ShockedSelfAdaptiveMutation(threshold, hardness, lowerBoundary, upperBoundary, shockInterval);
         } else {
             //System.out.println("No shocking");
-            mutation = new SelfAdaptiveMutation(threshold,hardness,lowerBoundary,upperBoundary);
+            mutation = new SelfAdaptiveMutation(sigmaThreshold,hardness,lowerBoundary,upperBoundary);
         }
 
         Recombination recombination = new DiscreteRecombination();
