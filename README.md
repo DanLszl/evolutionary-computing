@@ -1,5 +1,39 @@
 # Evolutionary Computing IntelliJ IDEA project
 
+### NOTE TO TAs -- For evaluation testing please run the following commands:
+
+Bentcigar without shock:
+```
+java -DuseShockingForTournament=False -DuseShockingForMutation=False -DpopulationSize=200 -DsigmaThreshold=0.0001 -DtournamentGenerations=50 -DtournamentSizeStart=2 -DtournamentSizeEnd=20 -Djava.library.path=. -jar testrun.jar -submission=player58 -evaluation=BentCigarFunction -seed=1
+```
+
+Bentcigar with shock:
+```
+java -DuseShockingForTournament=True -DuseShockingForMutation=True -DpopulationSize=200 -DsigmaThreshold=0.0001 -DtournamentGenerations=50 -DshockPatience=1 -DtournamentSizeStart=2 -DtournamentSizeEnd=20 -Djava.library.path=. -jar testrun.jar -submission=player58 -evaluation=BentCigarFunction -seed=1
+```
+
+katsuura without shock:
+```
+java -DuseShockingForTournament=False -DuseShockingForMutation=False -DpopulationSize=100 -DsigmaThreshold=0.001 -DtournamentGenerations=500 -DtournamentSizeStart=2 -DtournamentSizeEnd=20 -Djava.library.path=. -jar testrun.jar -submission=player58 -evaluation=KatsuuraEvaluation -seed=1
+```
+
+katsuura with shock:
+```
+java -DuseShockingForTournament=True -DuseShockingForMutation=True -DpopulationSize=100 -DsigmaThreshold=0.001 -DtournamentGenerations=500 -DshockPatience=750 -DtournamentSizeStart=2 -DtournamentSizeEnd=20 -Djava.library.path=. -jar testrun.jar -submission=player58 -evaluation=KatsuuraEvaluation -seed=1
+```
+
+shaffers without shock:
+```
+java -DuseShockingForTournament=False -DuseShockingForMutation=False -DpopulationSize=250 -DsigmaThreshold=0.01 -DtournamentGenerations=50 -DtournamentSizeStart=2 -DtournamentSizeEnd=20 -Djava.library.path=. -jar testrun.jar -submission=player58 -evaluation=SchaffersEvaluation -seed=1
+```
+
+schaffers with shock:
+```
+java -DuseShockingForTournament=True -DuseShockingForMutation=True -DpopulationSize=250 -DsigmaThreshold=0.01 -DtournamentGenerations=50 -DshockPatience=50 -DtournamentSizeStart=2 -DtournamentSizeEnd=20 -Djava.library.path=. -jar testrun.jar -submission=player58 -evaluation=SchaffersEvaluation -seed=1
+```
+
+
+
 ### Important: this project was tested on linux and mac only. Use it at your own risk.
 
 ## Steps to import the the project:
